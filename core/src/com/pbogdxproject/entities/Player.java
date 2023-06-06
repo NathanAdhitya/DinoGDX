@@ -12,12 +12,15 @@ public class Player extends Rectangle implements EntityLifecycle {
     Texture texture = new Texture(Gdx.files.internal("t-rex.png"));
     Sprite sprite = new Sprite(texture);
 
-    final static float gravity = 600f;
+    final static float gravity = 980f;
     float yVelocity = 0;
 
+    float yLowerBound = 100;
+
     public Player(){
-        width = 144;
-        height = 144;
+        width = 80;
+        height = 86;
+        x = 100;
     }
     public void tick(float delta){
         physicsTick(delta);
@@ -27,9 +30,9 @@ public class Player extends Rectangle implements EntityLifecycle {
         yVelocity += -gravity * dt;
         y += yVelocity * dt;
 
-        if(y <= 0) {
+        if(y <= yLowerBound) {
             yVelocity = 0;
-            y = 0;
+            y = yLowerBound;
 
             // Eligible for jumping
             if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
