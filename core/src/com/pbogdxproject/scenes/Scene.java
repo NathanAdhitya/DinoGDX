@@ -12,6 +12,7 @@ public class Scene implements EntityLifecycle {
     public Scene(){
         // Create Player
         lifecycles.add(new Player());
+        lifecycles.add(new ScrollingFloor());
     }
 
     public void tick(float delta){

@@ -15,6 +15,9 @@ public class MyGdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	Scene scene;
 
+	public float screenHeightMeters = 5;
+	public float screenWidthMeters = 20;
+
 
 	@Override
 	public void create () {
