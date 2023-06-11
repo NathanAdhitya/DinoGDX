@@ -8,10 +8,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.pbogdxproject.interfaces.EntityLifecycle;
+import com.pbogdxproject.GameState;
+import com.pbogdxproject.interfaces.Lifecycle;
 
-public class Player extends Rectangle implements EntityLifecycle {
-    final static float gravity = 980f;
+public class Player extends Rectangle implements Lifecycle {
+    final static float gravity = 10f;
     private static final int FRAME_COLS = 3;
     Texture texture = new Texture(Gdx.files.internal("t-rex.png"));
     Sprite sprite = new Sprite(texture);
@@ -44,7 +45,7 @@ public class Player extends Rectangle implements EntityLifecycle {
     }
 
     private void physicsTick(float dt) {
-        yVelocity += -gravity * dt;
+        yVelocity += -gravity * dt * GameState.physicsScale;
         y += yVelocity * dt;
 
         if (y <= yLowerBound) {
@@ -54,7 +55,7 @@ public class Player extends Rectangle implements EntityLifecycle {
 
             // Eligible for jumping
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-                yVelocity = 300;
+                yVelocity = 3.5f * GameState.physicsScale;
             }
         } else {
             isOnGround = false;
@@ -62,7 +63,7 @@ public class Player extends Rectangle implements EntityLifecycle {
     }
 
     public void render(SpriteBatch batch) {
-        stateTime += Gdx.graphics.getDeltaTime();
+        stateTime += Gdx.graphics.getDeltaTime() * GameState.scrollSpeed;
         if(!isOnGround){
             batch.draw(sprite, x, y);
         } else {

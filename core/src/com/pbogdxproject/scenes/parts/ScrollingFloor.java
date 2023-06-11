@@ -1,15 +1,16 @@
-package com.pbogdxproject.scenes;
+package com.pbogdxproject.scenes.parts;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.pbogdxproject.interfaces.EntityLifecycle;
+import com.pbogdxproject.GameState;
+import com.pbogdxproject.interfaces.Lifecycle;
 
 import java.util.LinkedList;
 import java.util.Random;
 
-public class ScrollingFloor implements EntityLifecycle {
+public class ScrollingFloor implements Lifecycle {
 
     private Texture texture = new Texture(Gdx.files.internal("textures/ground.png"));
     private TextureRegion[] regions;
@@ -32,18 +33,18 @@ public class ScrollingFloor implements EntityLifecycle {
         }
 
         // Calculate startY
-        startY -= 32 - 4;
+        startY -= 8;
 
         // For Testing
-        for (int i = 0; i < 12; i++) {
-            currentPlacedRegions.add(0);
+        for (int i = 0; i < 16; i++) {
+            currentPlacedRegions.add(rnd.nextInt(8));
         }
     }
 
     @Override
     public void tick(float delta) {
         // Update the scrolling floor (move, generate next.)
-        currentOffset += delta * 200;
+        currentOffset += delta * 200 * GameState.scrollSpeed;
     }
 
     @Override
