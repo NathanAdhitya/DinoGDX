@@ -33,7 +33,7 @@ public class ScrollingFloor implements Lifecycle {
         }
 
         // Calculate startY
-        startY -= 8;
+        startY -= 4;
 
         // For Testing
         for (int i = 0; i < 16; i++) {
@@ -50,7 +50,7 @@ public class ScrollingFloor implements Lifecycle {
     @Override
     public void render(SpriteBatch batch) {
         int width = 64;
-        int height = 32;
+        int height = 16;
 
         float localOffset = currentOffset % (width);
 

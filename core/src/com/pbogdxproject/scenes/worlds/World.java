@@ -7,5 +7,5 @@ abstract public class World implements Lifecycle {
     Lifecycle[] backgroundEntities;
     Obstacle[] obstacles;
 
-    abstract public Lifecycle spawnObstacle();
+    abstract public Obstacle spawnObstacle();
 }

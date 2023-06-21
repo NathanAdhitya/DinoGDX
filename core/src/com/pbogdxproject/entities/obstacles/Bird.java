@@ -2,11 +2,12 @@ package com.pbogdxproject.entities.obstacles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.Random;
 
-public class Bird extends Obstacle{
+public class Bird extends Obstacle {
    int width;
    int height;
    int [] yValues = {1, 10}; // diisi sama tinggi e burung e mau berapa
@@ -19,7 +20,7 @@ public class Bird extends Obstacle{
       Random rndm = new Random();
       this.yValue = this.yValues[rndm.nextInt(this.yValues.length)];
 
-      Texture runningAnimationSheet = new Texture(Gdx.files.internal("bird-anim.png"));
+      Texture runningAnimationSheet = new Texture(Gdx.files.internal("textures/bird-anim.png"));
 
       TextureRegion[][] tmp = TextureRegion.split(runningAnimationSheet,
               runningAnimationSheet.getWidth() / 2
@@ -31,4 +32,28 @@ public class Bird extends Obstacle{
       }
    }
 
+   @Override
+   public void init() {
+
+   }
+
+   @Override
+   public void tick(float delta) {
+
+   }
+
+   @Override
+   public void render(SpriteBatch batch) {
+
+   }
+
+   @Override
+   public void dispose() {
+
+   }
+
+   @Override
+   void onPlayerCollision() {
+
+   }
 }

@@ -14,10 +14,10 @@ import com.pbogdxproject.interfaces.Lifecycle;
 public class Player extends Rectangle implements Lifecycle {
     final static float gravity = 10f;
     private static final int FRAME_COLS = 3;
-    Texture texture = new Texture(Gdx.files.internal("t-rex.png"));
+    Texture texture = new Texture(Gdx.files.internal("textures/t-rex.png"));
     Sprite sprite = new Sprite(texture);
     Animation<TextureRegion> runningAnimation;
-    Texture runningAnimationSheet = new Texture(Gdx.files.internal("t-rex-anim.png"));
+    Texture runningAnimationSheet = new Texture(Gdx.files.internal("textures/t-rex-anim.png"));
     float stateTime = 0f;
     float yVelocity = 0;
     boolean isOnGround = true;
@@ -71,6 +71,7 @@ public class Player extends Rectangle implements Lifecycle {
             batch.draw(currentFrame, x, y);
         }
 
+        batch.draw(GameState.hitboxTexture, x, y, width, height);
     }
 
     public void dispose() {

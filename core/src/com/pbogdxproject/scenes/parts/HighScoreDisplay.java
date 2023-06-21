@@ -1,5 +1,4 @@
 package com.pbogdxproject.scenes.parts;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,21 +8,21 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.pbogdxproject.GameState;
 import com.pbogdxproject.interfaces.Lifecycle;
 
-public class ScoreDisplay implements Lifecycle {
+public class HighScoreDisplay implements Lifecycle {
 
     final static int scorePad = 5;
     final static int posTop = 80;
-    final static int posRight = 80;
+    final static int posRight = 180;
 
     FreeTypeFontGenerator fontGenerator;
     BitmapFont font;
     GlyphLayout glyphLayout = new GlyphLayout();
 
-    public ScoreDisplay() {
+    public HighScoreDisplay() {
         fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/PressStart2P-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         fontParameter.size = 16;
-        fontParameter.color = new Color(0x535353ff);
+        fontParameter.color = new Color(0x737373ff);
         font = fontGenerator.generateFont(fontParameter);
     }
 
@@ -39,13 +38,14 @@ public class ScoreDisplay implements Lifecycle {
         int x = Gdx.graphics.getWidth() - posRight;
         int y = Gdx.graphics.getHeight() - posTop;
 
+        if(GameState.highScore != 0){
+            String scoreText = String.format("HI %1$0"+scorePad+".0f", GameState.highScore);
+            glyphLayout.setText(font, scoreText);
+            x -= glyphLayout.width;
 
-        String scoreText = String.format("%1$0"+scorePad+".0f", GameState.sessionScore);
-        glyphLayout.setText(font, scoreText);
-        x -= glyphLayout.width;
-
-        // Draw the score display
-        font.draw(batch, scoreText, x, y);
+            // Draw the score display
+            font.draw(batch, scoreText, x, y);
+        }
     }
 
     @Override
