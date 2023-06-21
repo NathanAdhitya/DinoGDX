@@ -38,6 +38,8 @@ public class Player extends Rectangle implements Lifecycle {
             runningFrames[n++] = tmp[0][i];
         }
         runningAnimation = new Animation<>(0.1f, runningFrames);
+
+
     }
 
     public void tick(float delta) {

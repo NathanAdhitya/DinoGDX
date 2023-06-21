@@ -2,7 +2,9 @@ package com.pbogdxproject;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,6 +21,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
     public float screenHeightMeters = 5;
     public float screenWidthMeters = 20;
+    public Music jump, score;
 
     @Override
     public void create() {
@@ -32,6 +35,9 @@ public class MyGdxGame extends ApplicationAdapter {
             System.out.println("Loading " + file.path());
             assets.load(file.path(), Texture.class);
         });
+        // Load all sounds in assets
+        jump = Gdx.audio.newMusic(Gdx.files.internal("sound/jump.mp3"));
+        score = Gdx.audio.newMusic(Gdx.files.internal("sound/score.mp3"));
     }
 
     @Override
@@ -50,6 +56,10 @@ public class MyGdxGame extends ApplicationAdapter {
 
         float delta = Gdx.graphics.getDeltaTime();
         gameScene.tick(delta);
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            jump.play();
+        }
 
         batch.begin();
         gameScene.render(batch);
