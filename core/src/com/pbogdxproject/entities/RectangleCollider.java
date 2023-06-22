@@ -28,8 +28,6 @@ public class RectangleCollider extends Rectangle implements Lifecycle {
         this.offset = offset;
     }
 
-    public void init(){}
-
     public void tick(float delta){}
 
     public void render(SpriteBatch batch){
@@ -45,12 +43,6 @@ public class RectangleCollider extends Rectangle implements Lifecycle {
         this.y = (y + offset.bottom) * scale;
         this.width = width - (offset.right + offset.left) * scale;
         this.height = height - (offset.top + offset.bottom) * scale;
-    }
-
-    public RectangleCollider transform(float x, float y){
-        RectangleCollider clone = new RectangleCollider(this.x + x, this.y + y, width, height, new Offset2D());
-        clone.color = this.color;
-        return clone;
     }
 
     public void applyTransformFrom(RectangleCollider collider, float x, float y){
