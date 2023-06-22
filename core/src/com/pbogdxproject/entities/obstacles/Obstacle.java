@@ -2,13 +2,23 @@ package com.pbogdxproject.entities.obstacles;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pbogdxproject.GameState;
-import com.pbogdxproject.entities.Collider2D;
+import com.pbogdxproject.entities.RectangleCollider;
 import com.pbogdxproject.entities.Entity;
 import com.pbogdxproject.entities.Player;
 
 abstract public class Obstacle extends Entity {
 
-    public Collider2D[] colliders = {};
+    public RectangleCollider[] colliders = {};
+    private RectangleCollider[] absoluteColliders = {};
+
+    public void init() {
+        super.init();
+
+        absoluteColliders = new RectangleCollider[colliders.length];
+        for (int i = 0; i < colliders.length; i++) {
+            absoluteColliders[i] = colliders[i].copy();
+        }
+    }
 
     // Collision Management
     void onPlayerCollision() {
@@ -16,8 +26,13 @@ abstract public class Obstacle extends Entity {
     }
 
     public void tickCollision(Player p) {
-        for (Collider2D collider : colliders) {
-            if (collider.transform(x, y).overlaps(p)) {
+        for (int i = 0; i < colliders.length; i++) {
+            RectangleCollider collider = colliders[i];
+            RectangleCollider absoluteCollider = absoluteColliders[i];
+
+            absoluteCollider.applyTransformFrom(collider, x, y);
+
+            if (absoluteCollider.overlaps(p)) {
                 onPlayerCollision();
                 return;
             }
@@ -28,8 +43,8 @@ abstract public class Obstacle extends Entity {
     public void render(SpriteBatch batch) {
         super.render(batch);
 
-        for (Collider2D collider : colliders) {
-            collider.transform(x, y).render(batch);
+        for (RectangleCollider collider : absoluteColliders) {
+            collider.render(batch);
         }
     }
 
@@ -48,7 +63,7 @@ abstract public class Obstacle extends Entity {
         final float scale = getScale();
 
         // Recalculate collisions
-        for (Collider2D collider : colliders) {
+        for (RectangleCollider collider : colliders) {
             collider.calculateBounds(0, 0, width, height, scale);
         }
     }

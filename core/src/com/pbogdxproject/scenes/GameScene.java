@@ -66,8 +66,9 @@ public class GameScene implements Lifecycle {
                 Obstacle newObstacle = currentWorld.spawnObstacle();
                 if(newObstacle != null){
                     obstacles.add(newObstacle);
-                    newObstacle.init();
                     newObstacle.x = 500;
+                    newObstacle.init();
+                    newObstacle.tickCollision(player);
                 }
             }
 
@@ -75,6 +76,7 @@ public class GameScene implements Lifecycle {
             for (Iterator<Obstacle> iterator = obstacles.iterator(); iterator.hasNext(); ) {
                 Obstacle v =  iterator.next();
                 if (v.x < -128) {
+                    v.reset();
                     v.dispose();
                     iterator.remove();
                 }
