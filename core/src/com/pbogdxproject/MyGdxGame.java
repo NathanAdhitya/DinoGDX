@@ -38,6 +38,8 @@ public class MyGdxGame extends ApplicationAdapter {
         // Load all sounds in assets
         jump = Gdx.audio.newMusic(Gdx.files.internal("sound/jump.mp3"));
         score = Gdx.audio.newMusic(Gdx.files.internal("sound/score.mp3"));
+
+        assets.finishLoading();
     }
 
     @Override

@@ -1,21 +1,14 @@
 package com.pbogdxproject.entities.obstacles;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.pbogdxproject.GameState;
+import com.pbogdxproject.entities.Collider2D;
 import com.pbogdxproject.entities.Entity;
-import com.pbogdxproject.entities.Offset2D;
 import com.pbogdxproject.entities.Player;
 
 abstract public class Obstacle extends Entity {
-    public Offset2D colliderOffset = new Offset2D();
 
-    /**
-     * Relative to the obstacle's position
-     */
-    protected Rectangle collider;
-    private Rectangle absoluteCollider = new Rectangle();
-
+    public Collider2D[] colliders = {};
 
     // Collision Management
     void onPlayerCollision() {
@@ -23,13 +16,11 @@ abstract public class Obstacle extends Entity {
     }
 
     public void tickCollision(Player p) {
-        // Calculate absolute collision box and check for collision
-        absoluteCollider.x = collider.x + this.x;
-        absoluteCollider.y = collider.y + this.y;
-
-        if (absoluteCollider.overlaps(p)) {
-            // Discrete collision checking
-            onPlayerCollision();
+        for (Collider2D collider : colliders) {
+            if (collider.transform(x, y).overlaps(p)) {
+                onPlayerCollision();
+                return;
+            }
         }
     }
 
@@ -37,8 +28,9 @@ abstract public class Obstacle extends Entity {
     public void render(SpriteBatch batch) {
         super.render(batch);
 
-        // Render collision box
-        batch.draw(GameState.hitboxTexture, absoluteCollider.x, absoluteCollider.y, absoluteCollider.width, absoluteCollider.height);
+        for (Collider2D collider : colliders) {
+            collider.transform(x, y).render(batch);
+        }
     }
 
     @Override
@@ -53,20 +45,12 @@ abstract public class Obstacle extends Entity {
     protected void recalculateSize() {
         super.recalculateSize();
 
-        // Recalculate collider offsets
-        collider = new Rectangle(
-                -colliderOffset.left * getScale(),
-                -colliderOffset.bottom * getScale(),
-                width + colliderOffset.left + colliderOffset.right * getScale(),
-                height + colliderOffset.bottom + colliderOffset.top * getScale()
-        );
+        final float scale = getScale();
 
-        absoluteCollider = new Rectangle(
-                x + collider.x,
-                y + collider.y,
-                collider.width,
-                collider.height
-        );
+        // Recalculate collisions
+        for (Collider2D collider : colliders) {
+            collider.calculateBounds(0, 0, width, height, scale);
+        }
     }
 
     @Override

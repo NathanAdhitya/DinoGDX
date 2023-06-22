@@ -1,6 +1,6 @@
 package com.pbogdxproject.entities;
 
-public class Offset2D {
+public class Offset2D implements Cloneable {
     public float top, bottom, right, left;
 
     public Offset2D(){
@@ -15,5 +15,14 @@ public class Offset2D {
         this.bottom = bottom;
         this.right = right;
         this.left = left;
+    }
+
+    @Override
+    public Offset2D clone() {
+        try {
+            return (Offset2D) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
