@@ -1,4 +1,5 @@
 package com.pbogdxproject.scenes.parts;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -48,8 +49,8 @@ public class HighScoreDisplay implements Lifecycle {
         int x = (int) (viewport.getWorldWidth() - posRight);
         int y = (int) (viewport.getWorldHeight() - posTop);
 
-        if(GameState.highScore != 0){
-            String scoreText = String.format("HI %1$0"+scorePad+".0f", GameState.highScore);
+        if (GameState.highScore != 0) {
+            String scoreText = String.format("HI %1$0" + scorePad + ".0f", GameState.highScore);
             glyphLayout.setText(font, scoreText);
             x -= glyphLayout.width;
 

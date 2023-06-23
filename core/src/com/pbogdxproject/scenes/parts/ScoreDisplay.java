@@ -52,7 +52,7 @@ public class ScoreDisplay implements Lifecycle {
         int y = (int) (viewport.getWorldHeight() - posTop);
 
 
-        String scoreText = String.format("%1$0"+scorePad+".0f", GameState.sessionScore);
+        String scoreText = String.format("%1$0" + scorePad + ".0f", GameState.sessionScore);
         glyphLayout.setText(font, scoreText);
         x -= glyphLayout.width;
 

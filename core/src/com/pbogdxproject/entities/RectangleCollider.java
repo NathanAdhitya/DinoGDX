@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.pbogdxproject.GameConstants;
 import com.pbogdxproject.interfaces.Lifecycle;
 
 import java.util.Random;
@@ -24,7 +25,7 @@ public class RectangleCollider extends Rectangle implements Lifecycle {
         calculateBounds(x, y, width, height, 1);
     }
 
-    public RectangleCollider(Offset2D offset){
+    public RectangleCollider(Offset2D offset) {
         this.offset = offset;
     }
 
@@ -33,24 +34,27 @@ public class RectangleCollider extends Rectangle implements Lifecycle {
 
     }
 
-    public void tick(float delta){}
+    public void tick(float delta) {
+    }
 
-    public void render(SpriteBatch batch){
+    public void render(SpriteBatch batch) {
+        if (!GameConstants.DEBUG_DRAW_COLLISION_SHAPES) return;
         sprite.setBounds(x, y, width, height);
         sprite.setColor(color);
         sprite.draw(batch);
     }
 
-    public void dispose(){}
+    public void dispose() {
+    }
 
-    public void calculateBounds(float x, float y, float width, float height, float scale){
+    public void calculateBounds(float x, float y, float width, float height, float scale) {
         this.x = x + offset.left * scale;
         this.y = y + offset.bottom * scale;
         this.width = width - (offset.right + offset.left) * scale;
         this.height = height - (offset.top + offset.bottom) * scale;
     }
 
-    public void applyTransformFrom(RectangleCollider collider, float x, float y){
+    public void applyTransformFrom(RectangleCollider collider, float x, float y) {
         this.x = collider.x + x;
         this.y = collider.y + y;
         this.width = collider.width;

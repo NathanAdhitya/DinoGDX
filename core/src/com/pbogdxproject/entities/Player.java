@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.pbogdxproject.GameConstants;
 import com.pbogdxproject.GameState;
 import com.pbogdxproject.interfaces.Lifecycle;
 
@@ -24,16 +25,16 @@ public class Player extends Rectangle implements Lifecycle {
     float yLowerBound = 100;
 
     RectangleCollider[][] colliders = {
-            {
-                    // Running state
-                    new RectangleCollider(0f, 0f, 80f, 86f, new Offset2D(0, 48, 0, 30)),
-                    new RectangleCollider(0f, 0f, 80f, 86f, new Offset2D(0, 0, 32, 20)),
-                    new RectangleCollider(0f, 0f, 80f, 86f, new Offset2D(30, 35, 20, 0))
-            },
-            {
-                    // TODO: Ducking stage
+        {
+            // Running state
+            new RectangleCollider(0f, 0f, 80f, 86f, new Offset2D(0, 48, 0, 30)),
+            new RectangleCollider(0f, 0f, 80f, 86f, new Offset2D(0, 0, 32, 20)),
+            new RectangleCollider(0f, 0f, 80f, 86f, new Offset2D(30, 35, 20, 0))
+        },
+        {
+            // TODO: Ducking stage
 
-            }
+        }
     };
 
     public Player() {
@@ -42,8 +43,9 @@ public class Player extends Rectangle implements Lifecycle {
         x = 100;
 
         TextureRegion[][] tmp = TextureRegion.split(runningAnimationSheet,
-                runningAnimationSheet.getWidth() / FRAME_COLS
-                , runningAnimationSheet.getHeight());
+            runningAnimationSheet.getWidth() / FRAME_COLS
+            , runningAnimationSheet.getHeight()
+        );
 
         TextureRegion[] runningFrames = new TextureRegion[2];
         for (int i = 1, n = 0; i < tmp[0].length; i++) {
@@ -75,7 +77,7 @@ public class Player extends Rectangle implements Lifecycle {
     }
 
     private void physicsTick(float dt) {
-        yVelocity += -gravity * dt * GameState.physicsScale;
+        yVelocity += -gravity * dt * GameConstants.PHYSICS_MULTIPLIER;
         y += yVelocity * dt;
 
         if (y <= yLowerBound) {
@@ -85,7 +87,7 @@ public class Player extends Rectangle implements Lifecycle {
 
             // Eligible for jumping
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-                yVelocity = 4f * GameState.physicsScale;
+                yVelocity = 4f * GameConstants.PHYSICS_MULTIPLIER;
             }
         } else {
             isOnGround = false;
@@ -93,7 +95,7 @@ public class Player extends Rectangle implements Lifecycle {
     }
 
     public void render(SpriteBatch batch) {
-        if(GameState.isAlive)
+        if (GameState.isAlive)
             stateTime += Gdx.graphics.getDeltaTime() * GameState.scrollSpeed;
 
         if (!isOnGround) {

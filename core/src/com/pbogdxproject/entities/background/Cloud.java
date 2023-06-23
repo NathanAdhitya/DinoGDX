@@ -10,12 +10,12 @@ import java.util.Random;
 
 public class Cloud extends Entity implements Pool.Poolable {
 
+    static Random rand = new Random();
+    private final Texture texture = new Texture("textures/cloud.png");
     public Vector2 position;
     public boolean alive;
     public float scale;
     public float speed;
-    static Random rand = new Random();
-    private final Texture texture = new Texture("textures/cloud.png");
 
     @Override
     public void init() {

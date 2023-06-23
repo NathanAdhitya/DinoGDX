@@ -6,17 +6,17 @@ import com.pbogdxproject.entities.Offset2D;
 import com.pbogdxproject.entities.RectangleCollider;
 
 public class Lava extends Obstacle {
-   @Override
-   public void init() {
-      texture = MyGdxGame.assets.get("textures/lava.png", Texture.class);
-      y = 100;
+    final private static RectangleCollider[] COLLIDERS = {
+        new RectangleCollider(new Offset2D(0, 0, 15, 15)),
+        new RectangleCollider(new Offset2D(20, 30, 0, 0))
+    };
 
-      colliders = COLLIDERS;
-      super.init();
-   }
+    @Override
+    public void init() {
+        texture = MyGdxGame.assets.get("textures/lava.png", Texture.class);
+        y = 100;
 
-   final private static RectangleCollider[] COLLIDERS = {
-           new RectangleCollider(new Offset2D(0,0,15,15)),
-           new RectangleCollider(new Offset2D(20,30,0,0))
-   };
+        colliders = COLLIDERS;
+        super.init();
+    }
 }

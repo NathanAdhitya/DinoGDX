@@ -17,18 +17,15 @@ public class ScrollingFloor implements Lifecycle {
      * Indicates how many slices does the ground texture have.
      */
     private final static int REGION_SLICES = 16;
+    Viewport viewport;
     private Texture texture;
-
     private TextureRegion[] slicedRegions;
     private float currentOffset = 0;
     private float lastCullOffset = 0;
     private LinkedList<Integer> currentPlacedRegions = new LinkedList<>();
     private float startY = 100;
     private float startX = 0;
-
-
     private Random rnd = new Random();
-    Viewport viewport;
 
     public ScrollingFloor(Viewport viewport) {
         this.viewport = viewport;
@@ -68,7 +65,7 @@ public class ScrollingFloor implements Lifecycle {
 
         float localOffset = currentOffset % (width);
 
-        if((currentOffset - lastCullOffset) >= width){
+        if ((currentOffset - lastCullOffset) >= width) {
             int cullCount = (int) ((currentOffset - lastCullOffset) / width);
             lastCullOffset += cullCount * width;
             for (int i = 0; i < cullCount; i++) {
@@ -76,7 +73,6 @@ public class ScrollingFloor implements Lifecycle {
                 currentPlacedRegions.add(rnd.nextInt(REGION_SLICES));
             }
         }
-
 
 
         // Render all the ground

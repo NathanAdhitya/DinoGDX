@@ -5,9 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -19,20 +17,20 @@ import java.util.Arrays;
 
 public class MyGdxGame extends ApplicationAdapter {
     public static AssetManager assets = new AssetManager();
-    private SpriteBatch batch;
+    public Music jump, score;
     GameScene gameScene;
-
+    private SpriteBatch batch;
     private Viewport viewport;
     private OrthographicCamera camera;
-
-    public float screenHeightMeters = 5;
-    public float screenWidthMeters = 20;
-    public Music jump, score;
 
     @Override
     public void create() {
         camera = new OrthographicCamera();
-        viewport = new FitViewport(1200, 400, camera);
+        viewport = new FitViewport(
+            GameConstants.SCREEN_WIDTH_METERS * GameConstants.METERS_TO_PIXELS_MULTIPLIER,
+            GameConstants.SCREEN_HEIGHT_METERS * GameConstants.METERS_TO_PIXELS_MULTIPLIER,
+            camera
+        );
 
         gameScene = new GameScene(camera, viewport);
         batch = new SpriteBatch();

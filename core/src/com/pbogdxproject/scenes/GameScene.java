@@ -6,7 +6,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pbogdxproject.GameState;
 import com.pbogdxproject.entities.Player;
-import com.pbogdxproject.entities.obstacles.Cactus;
 import com.pbogdxproject.entities.obstacles.Obstacle;
 import com.pbogdxproject.interfaces.Lifecycle;
 import com.pbogdxproject.scenes.parts.HighScoreDisplay;
@@ -49,7 +48,7 @@ public class GameScene implements Lifecycle {
     }
 
     public void tick(float delta) {
-        if(GameState.isAlive){
+        if (GameState.isAlive) {
             lifecycles.forEach(v -> v.tick(delta));
             obstacles.forEach(v -> v.tick(delta));
             obstacles.forEach(v -> v.tickCollision(player));
@@ -75,7 +74,7 @@ public class GameScene implements Lifecycle {
                 obstacleSpawnInterval = Math.max(obstacleSpawnInterval * 0.95f, 0.5f);
 
                 Obstacle newObstacle = currentWorld.spawnObstacle();
-                if(newObstacle != null){
+                if (newObstacle != null) {
                     obstacles.add(newObstacle);
                     newObstacle.x = 1000;
                     newObstacle.init();
@@ -85,7 +84,7 @@ public class GameScene implements Lifecycle {
 
             // Destroy all obstacles outside view
             for (Iterator<Obstacle> iterator = obstacles.iterator(); iterator.hasNext(); ) {
-                Obstacle v =  iterator.next();
+                Obstacle v = iterator.next();
                 if (v.x < -128) {
                     v.reset();
                     v.dispose();

@@ -2,9 +2,9 @@ package com.pbogdxproject.entities.obstacles;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pbogdxproject.GameState;
-import com.pbogdxproject.entities.RectangleCollider;
 import com.pbogdxproject.entities.Entity;
 import com.pbogdxproject.entities.Player;
+import com.pbogdxproject.entities.RectangleCollider;
 
 abstract public class Obstacle extends Entity {
 
@@ -31,7 +31,7 @@ abstract public class Obstacle extends Entity {
             RectangleCollider absoluteCollider = absoluteColliders[i];
 
             absoluteCollider.applyTransformFrom(collider, x, y);
-            
+
             // Check against every player collider
             for (RectangleCollider activeCollider : p.getActiveColliders()) {
                 if (absoluteCollider.overlaps(activeCollider)) {
