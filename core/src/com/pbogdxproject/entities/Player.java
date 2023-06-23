@@ -16,7 +16,7 @@ public class Player extends Rectangle implements Lifecycle {
     final static float gravity = 12f;
     private static final int FRAME_COLS = 3;
     Texture texture = new Texture(Gdx.files.internal("textures/t-rex.png"));
-    Sprite sprite = new Sprite(texture);
+    Sprite sprite;
     Animation<TextureRegion> runningAnimation;
     Texture runningAnimationSheet = new Texture(Gdx.files.internal("textures/t-rex-anim.png"));
     float stateTime = 0f;
@@ -53,7 +53,7 @@ public class Player extends Rectangle implements Lifecycle {
         }
         runningAnimation = new Animation<>(0.1f, runningFrames);
 
-
+        sprite = new Sprite(tmp[0][0]);
     }
 
     @Override

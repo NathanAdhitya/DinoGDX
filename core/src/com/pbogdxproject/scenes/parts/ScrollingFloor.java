@@ -45,9 +45,12 @@ public class ScrollingFloor implements Lifecycle {
         }
 
         // Calculate startY
-        startY -= 4;
+        startY -= 8;
 
-        for (int i = 0; i < 16; i++) {
+        // Calculate needed slices to fill the screen
+        final int requiredSlices = (int) (viewport.getWorldWidth() / (width/REGION_SLICES) + 2);
+
+        for (int i = 0; i < requiredSlices; i++) {
             currentPlacedRegions.add(rnd.nextInt(REGION_SLICES));
         }
     }
