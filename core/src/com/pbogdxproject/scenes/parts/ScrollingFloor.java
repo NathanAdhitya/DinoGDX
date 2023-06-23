@@ -1,10 +1,11 @@
 package com.pbogdxproject.scenes.parts;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pbogdxproject.GameState;
+import com.pbogdxproject.MyGdxGame;
 import com.pbogdxproject.interfaces.Lifecycle;
 
 import java.util.LinkedList;
@@ -12,32 +13,45 @@ import java.util.Random;
 
 public class ScrollingFloor implements Lifecycle {
 
-    private Texture texture = new Texture(Gdx.files.internal("textures/ground.png"));
-    private TextureRegion[] regions;
+    /**
+     * Indicates how many slices does the ground texture have.
+     */
+    private final static int REGION_SLICES = 16;
+    private Texture texture;
+
+    private TextureRegion[] slicedRegions;
     private float currentOffset = 0;
     private float lastCullOffset = 0;
     private LinkedList<Integer> currentPlacedRegions = new LinkedList<>();
     private float startY = 100;
     private float startX = 0;
 
-    private Random rnd = new Random();
 
-    public ScrollingFloor() {
+    private Random rnd = new Random();
+    Viewport viewport;
+
+    public ScrollingFloor(Viewport viewport) {
+        this.viewport = viewport;
+    }
+
+    @Override
+    public void init() {
+        texture = MyGdxGame.assets.get("textures/ground.png", Texture.class);
+
         // Chop up regions based on width to several parts for randomization.
-        // Chop up to 8 regions.
         int width = texture.getWidth();
         int height = texture.getHeight();
-        regions = new TextureRegion[16];
-        for (int i = 0; i < 16; i++) {
-            regions[i] = new TextureRegion(texture, width / 16 * i, 0, width / 16, height);
+        slicedRegions = new TextureRegion[REGION_SLICES];
+
+        for (int i = 0; i < REGION_SLICES; i++) {
+            slicedRegions[i] = new TextureRegion(texture, width / REGION_SLICES * i, 0, width / REGION_SLICES, height);
         }
 
         // Calculate startY
         startY -= 4;
 
-        // For Testing
         for (int i = 0; i < 16; i++) {
-            currentPlacedRegions.add(rnd.nextInt(16));
+            currentPlacedRegions.add(rnd.nextInt(REGION_SLICES));
         }
     }
 
@@ -59,7 +73,7 @@ public class ScrollingFloor implements Lifecycle {
             lastCullOffset += cullCount * width;
             for (int i = 0; i < cullCount; i++) {
                 currentPlacedRegions.removeFirst();
-                currentPlacedRegions.add(rnd.nextInt(16));
+                currentPlacedRegions.add(rnd.nextInt(REGION_SLICES));
             }
         }
 
@@ -68,7 +82,7 @@ public class ScrollingFloor implements Lifecycle {
         // Render all the ground
         for (int i = 0; i < currentPlacedRegions.size(); i++) {
             batch.draw(
-                regions[currentPlacedRegions.get(i)],
+                slicedRegions[currentPlacedRegions.get(i)],
                 startX + width * i - localOffset,
                 startY,
                 width,

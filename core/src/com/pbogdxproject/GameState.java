@@ -7,7 +7,6 @@ public class GameState {
     public static float sessionScore = 0;
     public static float highScore = 100;
     public static boolean renderHitboxes = false;
-    public static Texture hitboxTexture = new Texture("textures/hitbox.png");
 
     final public static float physicsScale = 250f;
 

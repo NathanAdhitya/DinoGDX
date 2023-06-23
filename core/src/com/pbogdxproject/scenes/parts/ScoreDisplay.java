@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pbogdxproject.GameState;
 import com.pbogdxproject.interfaces.Lifecycle;
 
@@ -19,12 +20,23 @@ public class ScoreDisplay implements Lifecycle {
     BitmapFont font;
     GlyphLayout glyphLayout = new GlyphLayout();
 
-    public ScoreDisplay() {
+    Viewport viewport;
+
+
+    public ScoreDisplay(Viewport viewport) {
         fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/PressStart2P-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         fontParameter.size = 16;
         fontParameter.color = new Color(0x535353ff);
         font = fontGenerator.generateFont(fontParameter);
+
+        this.viewport = viewport;
+    }
+
+
+    @Override
+    public void init() {
+
     }
 
     @Override
@@ -36,8 +48,8 @@ public class ScoreDisplay implements Lifecycle {
     public void render(SpriteBatch batch) {
         // TODO: This can be made to only run during window resize.
         // Calculate the position of the score display
-        int x = Gdx.graphics.getWidth() - posRight;
-        int y = Gdx.graphics.getHeight() - posTop;
+        int x = (int) (viewport.getWorldWidth() - posRight);
+        int y = (int) (viewport.getWorldHeight() - posTop);
 
 
         String scoreText = String.format("%1$0"+scorePad+".0f", GameState.sessionScore);

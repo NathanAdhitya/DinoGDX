@@ -28,6 +28,11 @@ public class RectangleCollider extends Rectangle implements Lifecycle {
         this.offset = offset;
     }
 
+    @Override
+    public void init() {
+
+    }
+
     public void tick(float delta){}
 
     public void render(SpriteBatch batch){

@@ -54,6 +54,11 @@ public class Player extends Rectangle implements Lifecycle {
 
     }
 
+    @Override
+    public void init() {
+
+    }
+
     public RectangleCollider[] getActiveColliders() {
         return colliders[0];
     }
@@ -88,7 +93,9 @@ public class Player extends Rectangle implements Lifecycle {
     }
 
     public void render(SpriteBatch batch) {
-        stateTime += Gdx.graphics.getDeltaTime() * GameState.scrollSpeed;
+        if(GameState.isAlive)
+            stateTime += Gdx.graphics.getDeltaTime() * GameState.scrollSpeed;
+
         if (!isOnGround) {
             batch.draw(sprite, x, y);
         } else {

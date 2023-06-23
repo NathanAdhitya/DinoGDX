@@ -1,7 +1,9 @@
 package com.pbogdxproject.scenes;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pbogdxproject.GameState;
 import com.pbogdxproject.entities.Player;
 import com.pbogdxproject.entities.obstacles.Cactus;
@@ -24,15 +26,26 @@ public class GameScene implements Lifecycle {
     ArrayList<Obstacle> obstacles = new ArrayList<>();
     Player player = new Player();
 
-    public GameScene() {
+    Camera camera;
+    Viewport viewport;
+
+    public GameScene(Camera camera, Viewport viewport) {
+        this.camera = camera;
+        this.viewport = viewport;
+    }
+
+    @Override
+    public void init() {
         // Create Player
         lifecycles.add(currentWorld);
-        lifecycles.add(new ScrollingFloor());
+        lifecycles.add(new ScrollingFloor(viewport));
 
         lifecycles.add(player);
-        lifecycles.add(new HighScoreDisplay());
-        lifecycles.add(new ScoreDisplay());
-        lifecycles.add(new Cactus());
+        lifecycles.add(new HighScoreDisplay(viewport));
+        lifecycles.add(new ScoreDisplay(viewport));
+
+        // Call init on all lifecycles
+        lifecycles.forEach(Lifecycle::init);
     }
 
     public void tick(float delta) {
@@ -64,7 +77,7 @@ public class GameScene implements Lifecycle {
                 Obstacle newObstacle = currentWorld.spawnObstacle();
                 if(newObstacle != null){
                     obstacles.add(newObstacle);
-                    newObstacle.x = 500;
+                    newObstacle.x = 1000;
                     newObstacle.init();
                     newObstacle.tickCollision(player);
                 }

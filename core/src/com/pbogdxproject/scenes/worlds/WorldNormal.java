@@ -8,6 +8,11 @@ import com.pbogdxproject.interfaces.Lifecycle;
 public class WorldNormal extends World {
 
     @Override
+    public void init() {
+
+    }
+
+    @Override
     public void tick(float delta) {
 
     }

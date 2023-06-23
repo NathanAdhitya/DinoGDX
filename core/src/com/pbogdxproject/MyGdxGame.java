@@ -5,19 +5,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pbogdxproject.scenes.GameScene;
 
 import java.util.Arrays;
 
 public class MyGdxGame extends ApplicationAdapter {
-    private OrthographicCamera camera;
     public static AssetManager assets = new AssetManager();
     private SpriteBatch batch;
     GameScene gameScene;
+
+    private Viewport viewport;
+    private OrthographicCamera camera;
 
     public float screenHeightMeters = 5;
     public float screenWidthMeters = 20;
@@ -26,8 +32,9 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void create() {
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
-        gameScene = new GameScene();
+        viewport = new FitViewport(1200, 400, camera);
+
+        gameScene = new GameScene(camera, viewport);
         batch = new SpriteBatch();
 
         // Load all assets in assets/textures
@@ -40,12 +47,14 @@ public class MyGdxGame extends ApplicationAdapter {
         score = Gdx.audio.newMusic(Gdx.files.internal("sound/point.wav"));
 
         assets.finishLoading();
+
+        gameScene.init();
     }
 
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        camera.setToOrtho(false, width, height);
+        viewport.update(width, height, true);
     }
 
     // TODO: Create a viewport to handle the world and render the score seperately.
@@ -55,6 +64,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
         ScreenUtils.clear((float) 230 / 255, (float) 230 / 255, (float) 230 / 255, 1);
         batch.setProjectionMatrix(camera.combined);
+
+        viewport.apply();
 
         float delta = Gdx.graphics.getDeltaTime();
         gameScene.tick(delta);
