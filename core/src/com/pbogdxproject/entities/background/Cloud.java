@@ -1,54 +1,31 @@
 package com.pbogdxproject.entities.background;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Pool;
-import com.pbogdxproject.entities.Entity;
+import com.pbogdxproject.GameConstants;
+import com.pbogdxproject.GameState;
+import com.pbogdxproject.MyGdxGame;
 
-import java.util.Random;
-
-public class Cloud extends Entity implements Pool.Poolable {
-
-    static Random rand = new Random();
-    private final Texture texture = new Texture("textures/cloud.png");
-    public Vector2 position;
-    public boolean alive;
-    public float scale;
-    public float speed;
-
+public class Cloud extends BackgroundEntity {
     @Override
     public void init() {
-        position = new Vector2();
-        alive = true;
+        texture = MyGdxGame.assets.get("textures/cloud.png", Texture.class);
+
+        // Random y
+        y = GameState.RANDOM.nextFloat() * 50 + 250;
 
         // Random scale from 0.25 to 1
-        scale = rand.nextFloat() * 0.75f + 0.25f;
-    }
+        setScale(GameState.RANDOM.nextFloat() * 0.25f + 0.75f);
 
-    @Override
-    public void tick(float delta) {
-        // Move cloud
-        if (alive) {
-            position.x -= speed * delta;
-        }
-    }
+        // Random speed
+        speed = GameState.RANDOM.nextFloat() * 10 + 100;
 
-    @Override
-    public void render(SpriteBatch batch) {
-        // Only render if alive
-        if (alive) {
-            batch.draw(texture, position.x, position.y);
-        }
-    }
 
-    @Override
-    public void reset() {
-        alive = false;
+        super.init();
     }
 
     @Override
     public void dispose() {
-        texture.dispose();
+
     }
+
 }

@@ -14,7 +14,7 @@ abstract public class Entity implements Lifecycle, Pool.Poolable {
     public float x = 0, y = 0;
     protected int width, height;
     protected Texture texture = null;
-    float speed = 200;
+    protected float speed = 200;
     boolean isAlive = false;
     private float scale = 1;
 
