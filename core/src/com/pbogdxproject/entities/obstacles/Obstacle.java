@@ -31,10 +31,13 @@ abstract public class Obstacle extends Entity {
             RectangleCollider absoluteCollider = absoluteColliders[i];
 
             absoluteCollider.applyTransformFrom(collider, x, y);
-
-            if (absoluteCollider.overlaps(p)) {
-                onPlayerCollision();
-                return;
+            
+            // Check against every player collider
+            for (RectangleCollider activeCollider : p.getActiveColliders()) {
+                if (absoluteCollider.overlaps(activeCollider)) {
+                    onPlayerCollision();
+                    return;
+                }
             }
         }
     }

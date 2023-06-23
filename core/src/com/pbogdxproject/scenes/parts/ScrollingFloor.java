@@ -27,9 +27,9 @@ public class ScrollingFloor implements Lifecycle {
         // Chop up to 8 regions.
         int width = texture.getWidth();
         int height = texture.getHeight();
-        regions = new TextureRegion[8];
-        for (int i = 0; i < 8; i++) {
-            regions[i] = new TextureRegion(texture, width / 8 * i, 0, width / 8, height);
+        regions = new TextureRegion[16];
+        for (int i = 0; i < 16; i++) {
+            regions[i] = new TextureRegion(texture, width / 16 * i, 0, width / 16, height);
         }
 
         // Calculate startY
@@ -37,7 +37,7 @@ public class ScrollingFloor implements Lifecycle {
 
         // For Testing
         for (int i = 0; i < 16; i++) {
-            currentPlacedRegions.add(rnd.nextInt(8));
+            currentPlacedRegions.add(rnd.nextInt(16));
         }
     }
 
@@ -49,8 +49,8 @@ public class ScrollingFloor implements Lifecycle {
 
     @Override
     public void render(SpriteBatch batch) {
-        int width = 64;
-        int height = 16;
+        int width = 48;
+        int height = 32;
 
         float localOffset = currentOffset % (width);
 
@@ -59,7 +59,7 @@ public class ScrollingFloor implements Lifecycle {
             lastCullOffset += cullCount * width;
             for (int i = 0; i < cullCount; i++) {
                 currentPlacedRegions.removeFirst();
-                currentPlacedRegions.add(rnd.nextInt(8));
+                currentPlacedRegions.add(rnd.nextInt(16));
             }
         }
 

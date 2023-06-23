@@ -46,15 +46,13 @@ public class GameScene implements Lifecycle {
 
             // Increment scroll speed
             if (GameState.sessionScore > 1000) {
-                GameState.scrollSpeed = Math.min(GameState.sessionScore * 0.0015f + 0.5f, 4);
+                GameState.scrollSpeed = Math.min(GameState.sessionScore * 0.0015f + 2.5f, 4);
             } else if (GameState.sessionScore > 500) {
-                GameState.scrollSpeed = 2f;
+                GameState.scrollSpeed = 2.5f;
             } else if (GameState.sessionScore > 250) {
+                GameState.scrollSpeed = 2f;
+            } else if (GameState.sessionScore > 80) {
                 GameState.scrollSpeed = 1.75f;
-            } else if (GameState.sessionScore > 100) {
-                GameState.scrollSpeed = 1.5f;
-            } else if (GameState.sessionScore > 50) {
-                GameState.scrollSpeed = 1.3f;
             }
 
 

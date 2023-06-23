@@ -18,8 +18,6 @@ public class Cactus extends Obstacle {
         y = 100;
 
         colliders = COLLIDERS;
-
-        super.setScale(0.75f);
         super.init();
     }
 }
