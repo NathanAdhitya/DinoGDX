@@ -12,7 +12,7 @@ import com.pbogdxproject.GameState;
 import com.pbogdxproject.interfaces.Lifecycle;
 
 public class Player extends Rectangle implements Lifecycle {
-    final static float gravity = 9.8f;
+    final static float gravity = 12f;
     private static final int FRAME_COLS = 3;
     Texture texture = new Texture(Gdx.files.internal("textures/t-rex.png"));
     Sprite sprite = new Sprite(texture);
@@ -80,7 +80,7 @@ public class Player extends Rectangle implements Lifecycle {
 
             // Eligible for jumping
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-                yVelocity = 3.8f * GameState.physicsScale;
+                yVelocity = 4f * GameState.physicsScale;
             }
         } else {
             isOnGround = false;

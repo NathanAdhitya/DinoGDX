@@ -36,8 +36,8 @@ public class MyGdxGame extends ApplicationAdapter {
             assets.load(file.path(), Texture.class);
         });
         // Load all sounds in assets
-        jump = Gdx.audio.newMusic(Gdx.files.internal("sound/jump.mp3"));
-        score = Gdx.audio.newMusic(Gdx.files.internal("sound/score.mp3"));
+        jump = Gdx.audio.newMusic(Gdx.files.internal("sound/jump.wav"));
+        score = Gdx.audio.newMusic(Gdx.files.internal("sound/point.wav"));
 
         assets.finishLoading();
     }

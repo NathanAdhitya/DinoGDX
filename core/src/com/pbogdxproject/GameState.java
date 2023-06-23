@@ -3,7 +3,7 @@ package com.pbogdxproject;
 import com.badlogic.gdx.graphics.Texture;
 
 public class GameState {
-    public static float scrollSpeed = 1.25f;
+    public static float scrollSpeed = 1.75f;
     public static float sessionScore = 0;
     public static float highScore = 100;
     public static boolean renderHitboxes = false;

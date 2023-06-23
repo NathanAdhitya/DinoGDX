@@ -39,8 +39,8 @@ public class RectangleCollider extends Rectangle implements Lifecycle {
     public void dispose(){}
 
     public void calculateBounds(float x, float y, float width, float height, float scale){
-        this.x = (x + offset.left) * scale;
-        this.y = (y + offset.bottom) * scale;
+        this.x = x + offset.left * scale;
+        this.y = y + offset.bottom * scale;
         this.width = width - (offset.right + offset.left) * scale;
         this.height = height - (offset.top + offset.bottom) * scale;
     }

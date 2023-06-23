@@ -20,7 +20,7 @@ public class GameScene implements Lifecycle {
     ArrayList<Lifecycle> lifecycles = new ArrayList<>();
     World currentWorld = new WorldNormal();
     long lastObstacleSpawnTime = TimeUtils.millis();
-    float obstacleSpawnInterval = 1.5f;
+    float obstacleSpawnInterval = 2f;
     ArrayList<Obstacle> obstacles = new ArrayList<>();
     Player player = new Player();
 
@@ -50,9 +50,9 @@ public class GameScene implements Lifecycle {
             } else if (GameState.sessionScore > 500) {
                 GameState.scrollSpeed = 2.5f;
             } else if (GameState.sessionScore > 250) {
-                GameState.scrollSpeed = 2f;
+                GameState.scrollSpeed = 2.25f;
             } else if (GameState.sessionScore > 80) {
-                GameState.scrollSpeed = 1.75f;
+                GameState.scrollSpeed = 2f;
             }
 
 
