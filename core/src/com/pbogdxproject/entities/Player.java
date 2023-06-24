@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.pbogdxproject.GameConstants;
 import com.pbogdxproject.GameState;
+import com.pbogdxproject.GameStatus;
 import com.pbogdxproject.MyGdxGame;
 import com.pbogdxproject.interfaces.Lifecycle;
 
@@ -26,6 +27,8 @@ public class Player extends Rectangle implements Lifecycle {
     boolean isOnGround = true;
     float yLowerBound = 100;
     Music jumpSound;
+
+    TextureRegion[] textures;
 
     RectangleCollider[][] colliders = {
         {
@@ -60,6 +63,8 @@ public class Player extends Rectangle implements Lifecycle {
         );
 
         TextureRegion[] runningFrames = new TextureRegion[2];
+        textures = tmp[0];
+
         for (int i = 2, n = 0; i <= 3; i++) {
             runningFrames[n++] = tmp[0][i];
         }
@@ -108,10 +113,15 @@ public class Player extends Rectangle implements Lifecycle {
     }
 
     public void render(SpriteBatch batch) {
-        if (GameState.isAlive)
+        if (GameState.status == GameStatus.PLAYING)
             stateTime += Gdx.graphics.getDeltaTime();
 
-        if (!isOnGround) {
+        if (GameState.status == GameStatus.DEAD){
+            batch.draw(textures[4], x, y);
+            return;
+        }
+
+        if (!isOnGround || GameState.scrollSpeed == 0) {
             batch.draw(sprite, x, y);
         } else {
             TextureRegion currentFrame = runningAnimation.getKeyFrame(stateTime, true);

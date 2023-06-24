@@ -28,6 +28,13 @@ public class ScrollingFloor implements Lifecycle {
     private float startX = 0;
     private Random rnd = new Random();
 
+    private float initialAnimationStateTime = 0;
+
+    final private int RENDER_REGION_MULT = 2;
+    private int renderRegionWidth;
+    private int renderRegionHeight;
+
+
     public ScrollingFloor(Viewport viewport) {
         this.viewport = viewport;
     }
@@ -49,29 +56,35 @@ public class ScrollingFloor implements Lifecycle {
         startY -= 8;
 
         // Calculate needed slices to fill the screen
-        final int requiredSlices = (int) (viewport.getWorldWidth() / (width/REGION_SLICES) + 2);
+        final int requiredSlices = (int) (viewport.getWorldWidth() / (width / REGION_SLICES) + 2);
 
         for (int i = 0; i < requiredSlices; i++) {
             currentPlacedRegions.add(rnd.nextInt(REGION_SLICES));
         }
+
+        renderRegionWidth = (texture.getWidth() / REGION_SLICES) * RENDER_REGION_MULT;
+        renderRegionHeight = texture.getHeight() * RENDER_REGION_MULT;
+    }
+
+    public void runInitialAnimation() {
+        initialAnimationStateTime = 0;
     }
 
     @Override
     public void tick(float delta) {
         // Update the scrolling floor (move, generate next.)
         currentOffset += delta * 200 * GameState.scrollSpeed;
+        initialAnimationStateTime += delta;
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        int width = 48;
-        int height = 32;
 
-        float localOffset = currentOffset % (width);
+        float localOffset = currentOffset % (renderRegionWidth);
 
-        if ((currentOffset - lastCullOffset) >= width) {
-            int cullCount = (int) ((currentOffset - lastCullOffset) / width);
-            lastCullOffset += cullCount * width;
+        if ((currentOffset - lastCullOffset) >= renderRegionWidth) {
+            int cullCount = (int) ((currentOffset - lastCullOffset) / renderRegionWidth);
+            lastCullOffset += cullCount * renderRegionWidth;
             for (int i = 0; i < cullCount; i++) {
                 currentPlacedRegions.removeFirst();
                 currentPlacedRegions.add(rnd.nextInt(REGION_SLICES));
@@ -79,15 +92,48 @@ public class ScrollingFloor implements Lifecycle {
         }
 
 
-        // Render all the ground
+        // Render all the ground until the x position is reached.
+        float worldWidth = viewport.getWorldWidth();
+        float xLimit =
+            Math.min(initialAnimationStateTime / GameConstants.TIME_TO_FULL_GROUND_ANIMATION, 1f) * worldWidth;
+
         for (int i = 0; i < currentPlacedRegions.size(); i++) {
-            batch.draw(
-                slicedRegions[currentPlacedRegions.get(i)],
-                startX + width * i - localOffset,
-                startY,
-                width,
-                height
-            );
+            float regionX = startX + renderRegionWidth * i - localOffset;
+
+            if (regionX > xLimit) {
+                break;
+            }
+
+            TextureRegion targetRegion = slicedRegions[currentPlacedRegions.get(i)];
+
+            // If the region is partially outside the screen, cut it.
+            if (regionX + renderRegionWidth > xLimit) {
+                int originalWidth = targetRegion.getRegionWidth();
+
+                targetRegion = new TextureRegion(
+                    targetRegion,
+                    0,
+                    0,
+                    (int) (xLimit - regionX) / RENDER_REGION_MULT,
+                    targetRegion.getRegionHeight()
+                );
+
+                batch.draw(
+                    targetRegion,
+                    regionX,
+                    startY,
+                    (xLimit - regionX),
+                    renderRegionHeight
+                );
+            } else {
+                batch.draw(
+                    targetRegion,
+                    regionX,
+                    startY,
+                    renderRegionWidth,
+                    renderRegionHeight
+                );
+            }
         }
     }
 

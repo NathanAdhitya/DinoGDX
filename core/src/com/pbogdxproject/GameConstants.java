@@ -8,6 +8,10 @@ public class GameConstants {
     final static public int METERS_TO_PIXELS_MULTIPLIER = 100;
     final static public int Y_GROUND = 1 * METERS_TO_PIXELS_MULTIPLIER;
 
+    // Scene Settings
+    final static public float TIME_TO_FULL_GROUND_ANIMATION = 2f;
+    final static public float INITIAL_SCROLL_SPEED = 2f;
+
     // Physics Settings
     final public static float PHYSICS_MULTIPLIER = 250f;
 

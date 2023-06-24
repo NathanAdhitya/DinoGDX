@@ -10,7 +10,7 @@ import com.pbogdxproject.MyGdxGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(60);
+		config.setForegroundFPS(240);
 		config.setTitle("DinoGDX");
 		config.setWindowedMode(1200, 600);
 		config.setWindowIcon("textures/start-icon.png");

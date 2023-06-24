@@ -11,9 +11,9 @@ public class Cloud extends BackgroundEntity {
         texture = MyGdxGame.assets.get("textures/cloud.png", Texture.class);
 
         // Random y
-        y = GameState.RANDOM.nextFloat() * 100 + 250;
+        y = GameState.RANDOM.nextFloat() * 50 + 225;
 
-        // Random scale from 0.25 to 1
+        // Random scale from 0.75 to 1
         setScale(GameState.RANDOM.nextFloat() * 0.25f + 0.75f);
 
         // Random speed

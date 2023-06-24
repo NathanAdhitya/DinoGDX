@@ -1,10 +1,15 @@
 package com.pbogdxproject.scenes;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.pbogdxproject.GameConstants;
 import com.pbogdxproject.GameState;
+import com.pbogdxproject.GameStatus;
 import com.pbogdxproject.entities.Entity;
 import com.pbogdxproject.entities.Player;
 import com.pbogdxproject.entities.background.BackgroundEntity;
@@ -30,6 +35,8 @@ public class GameScene implements Lifecycle {
     ArrayList<BackgroundEntity> backgroundEntities = new ArrayList<>();
     Player player = new Player();
 
+    ScrollingFloor scrollingFloor;
+
     Camera camera;
     Viewport viewport;
 
@@ -42,7 +49,8 @@ public class GameScene implements Lifecycle {
     public void init() {
         // Create Player
         lifecycles.add(currentWorld);
-        lifecycles.add(new ScrollingFloor(viewport));
+        scrollingFloor = new ScrollingFloor(viewport);
+        lifecycles.add(scrollingFloor);
 
         lifecycles.add(player);
         lifecycles.add(new HighScoreDisplay(viewport));
@@ -50,10 +58,40 @@ public class GameScene implements Lifecycle {
 
         // Call init on all lifecycles
         lifecycles.forEach(Lifecycle::init);
+
+        // Tick the player once.
+        player.tick(0);
     }
 
     public void tick(float delta) {
-        if (GameState.isAlive) {
+        // Process GameState based on jump button.
+        boolean jumpButtonPressed = Gdx.input.isKeyPressed(Input.Keys.SPACE);
+
+        if(jumpButtonPressed){
+            if(GameState.status == GameStatus.STOPPED){
+                GameState.status = GameStatus.PLAYING;
+                GameState.scrollSpeed = GameConstants.INITIAL_SCROLL_SPEED;
+
+                scrollingFloor.runInitialAnimation();
+            } else if(GameState.status == GameStatus.DEAD){
+                GameState.status = GameStatus.PLAYING;
+                GameState.scrollSpeed = GameConstants.INITIAL_SCROLL_SPEED;
+
+                // Reset current score
+                GameState.sessionScore = 0;
+
+                // Dispose all on-screen entities and obstacles
+                obstacles.forEach(Lifecycle::dispose);
+                obstacles.clear();
+                backgroundEntities.forEach(Lifecycle::dispose);
+                backgroundEntities.clear();
+
+                scrollingFloor.runInitialAnimation();
+            }
+        }
+
+
+        if (GameState.status == GameStatus.PLAYING) {
             lifecycles.forEach(v -> v.tick(delta));
             obstacles.forEach(v -> v.tick(delta));
             obstacles.forEach(v -> {
@@ -62,7 +100,7 @@ public class GameScene implements Lifecycle {
             backgroundEntities.forEach(v -> v.tick(delta));
 
             // Increment score
-            GameState.sessionScore += delta * 5 * GameState.scrollSpeed * GameState.scrollSpeed;
+            GameState.sessionScore += delta * 5 * GameState.scrollSpeed;
 
             // Increment scroll speed
             if (GameState.sessionScore > 1000) {
@@ -90,9 +128,9 @@ public class GameScene implements Lifecycle {
             }
 
             // Spawn clouds randomly
-            if (TimeUtils.millis() - lastCloudSpawnAttempt > 200) {
+            if (TimeUtils.millis() - lastCloudSpawnAttempt > 400 / GameState.scrollSpeed) {
                 lastCloudSpawnAttempt = TimeUtils.millis();
-                if (GameState.RANDOM.nextFloat() < 0.1f) {
+                if (GameState.RANDOM.nextFloat() < 0.2f) {
                     Cloud newCloud = new Cloud();
                     backgroundEntities.add(newCloud);
                     newCloud.x = viewport.getWorldWidth() + 100;
