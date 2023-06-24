@@ -66,20 +66,19 @@ public class GameScene implements Lifecycle {
 
             // Increment scroll speed
             if (GameState.sessionScore > 1000) {
-                GameState.scrollSpeed = Math.min(GameState.sessionScore * 0.0015f + 2.5f, 4);
+                GameState.scrollSpeed = Math.min(GameState.sessionScore * 0.0015f + 2.5f, 5);
             } else if (GameState.sessionScore > 500) {
-                GameState.scrollSpeed = 2.5f;
+                GameState.scrollSpeed = 3f;
             } else if (GameState.sessionScore > 250) {
-                GameState.scrollSpeed = 2.25f;
+                GameState.scrollSpeed = 2.75f;
             } else if (GameState.sessionScore > 80) {
-                GameState.scrollSpeed = 2f;
+                GameState.scrollSpeed = 2.5f;
             }
 
 
             // Spawn random obstacle
             if (TimeUtils.millis() - lastObstacleSpawnTime > obstacleSpawnInterval * 1000) {
                 lastObstacleSpawnTime = TimeUtils.millis();
-                obstacleSpawnInterval = Math.max(obstacleSpawnInterval * 0.95f, 0.5f);
 
                 Obstacle newObstacle = currentWorld.spawnObstacle();
                 if (newObstacle != null) {

@@ -1,5 +1,8 @@
 package com.pbogdxproject;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+
 import java.util.Random;
 
 public class GameState {
@@ -15,5 +18,16 @@ public class GameState {
         scrollSpeed = 0;
         isAlive = false;
         System.out.println("Player died!");
+
+        // Save high score if it's higher than the current score
+        Preferences preferences = Gdx.app.getPreferences("GameState");
+        if (sessionScore > preferences.getInteger("highScore", 0)) {
+            preferences.putInteger("highScore", (int) sessionScore);
+            preferences.flush();
+
+            highScore = sessionScore;
+        }
     }
+
+
 }

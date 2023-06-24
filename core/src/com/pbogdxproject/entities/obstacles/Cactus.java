@@ -1,6 +1,7 @@
 package com.pbogdxproject.entities.obstacles;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.pbogdxproject.GameConstants;
 import com.pbogdxproject.MyGdxGame;
 import com.pbogdxproject.entities.Offset2D;
 import com.pbogdxproject.entities.RectangleCollider;
@@ -15,7 +16,7 @@ public class Cactus extends Obstacle {
     @Override
     public void init() {
         texture = MyGdxGame.assets.get("textures/cactus.png", Texture.class);
-        y = 100;
+        y = GameConstants.Y_GROUND;
 
         colliders = COLLIDERS;
         super.init();

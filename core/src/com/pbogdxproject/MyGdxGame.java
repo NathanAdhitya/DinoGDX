@@ -3,6 +3,7 @@ package com.pbogdxproject;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,8 +11,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pbogdxproject.scenes.GameScene;
+import com.pbogdxproject.scenes.parts.StartDisplay;
 
 import java.util.Arrays;
 
@@ -21,6 +24,7 @@ public class MyGdxGame extends ApplicationAdapter {
     GameScene gameScene;
     private SpriteBatch batch;
     private Viewport viewport;
+    private Viewport startViewport;
     private OrthographicCamera camera;
 
     @Override
@@ -31,6 +35,7 @@ public class MyGdxGame extends ApplicationAdapter {
             GameConstants.SCREEN_HEIGHT_METERS * GameConstants.METERS_TO_PIXELS_MULTIPLIER,
             camera
         );
+        startViewport = new ScreenViewport(camera);
 
         gameScene = new GameScene(camera, viewport);
         batch = new SpriteBatch();
@@ -40,11 +45,19 @@ public class MyGdxGame extends ApplicationAdapter {
             System.out.println("Loading " + file.path());
             assets.load(file.path(), Texture.class);
         });
-        // Load all sounds in assets
-        jump = Gdx.audio.newMusic(Gdx.files.internal("sound/jump.wav"));
-        score = Gdx.audio.newMusic(Gdx.files.internal("sound/point.wav"));
 
+        // Load all sounds in assets
+        Arrays.stream(Gdx.files.internal("sounds").list()).forEach(file -> {
+            System.out.println("Loading " + file.path());
+            assets.load(file.path(), Music.class);
+        });
+
+        // Ensure all assets have been loaded before initializing the game scene
         assets.finishLoading();
+
+        // Load the current high score
+        Preferences preferences = Gdx.app.getPreferences("GameState");
+        GameState.highScore = preferences.getInteger("highScore", 0);
 
         gameScene.init();
     }
@@ -55,22 +68,17 @@ public class MyGdxGame extends ApplicationAdapter {
         viewport.update(width, height, true);
     }
 
-    // TODO: Create a viewport to handle the world and render the score seperately.
     @Override
     public void render() {
         if (!assets.update()) return;
 
         ScreenUtils.clear((float) 230 / 255, (float) 230 / 255, (float) 230 / 255, 1);
         batch.setProjectionMatrix(camera.combined);
-
         viewport.apply();
 
         float delta = Gdx.graphics.getDeltaTime();
-        gameScene.tick(delta);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            jump.play();
-        }
+        gameScene.tick(delta);
 
         batch.begin();
         gameScene.render(batch);

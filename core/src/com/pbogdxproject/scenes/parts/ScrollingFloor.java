@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.pbogdxproject.GameConstants;
 import com.pbogdxproject.GameState;
 import com.pbogdxproject.MyGdxGame;
 import com.pbogdxproject.interfaces.Lifecycle;
@@ -23,7 +24,7 @@ public class ScrollingFloor implements Lifecycle {
     private float currentOffset = 0;
     private float lastCullOffset = 0;
     private LinkedList<Integer> currentPlacedRegions = new LinkedList<>();
-    private float startY = 100;
+    private float startY = GameConstants.Y_GROUND;
     private float startX = 0;
     private Random rnd = new Random();
 
