@@ -1,10 +1,8 @@
-package com.pbogdxproject.entities.obstacles;
+package com.pbogdxproject.entities.utils;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pbogdxproject.GameState;
-import com.pbogdxproject.entities.Entity;
 import com.pbogdxproject.entities.Player;
-import com.pbogdxproject.entities.RectangleCollider;
 
 abstract public class Obstacle extends Entity {
 
@@ -21,7 +19,7 @@ abstract public class Obstacle extends Entity {
     }
 
     // Collision Management
-    void onPlayerCollision() {
+    public void onPlayerCollision() {
         GameState.onPlayerDeath();
     }
 

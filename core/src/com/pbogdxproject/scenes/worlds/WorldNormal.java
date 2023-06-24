@@ -2,7 +2,7 @@ package com.pbogdxproject.scenes.worlds;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pbogdxproject.entities.obstacles.Cactus;
-import com.pbogdxproject.entities.obstacles.Obstacle;
+import com.pbogdxproject.entities.utils.Obstacle;
 
 public class WorldNormal extends World {
 

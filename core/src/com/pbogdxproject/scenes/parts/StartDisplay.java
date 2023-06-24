@@ -21,8 +21,6 @@ public class StartDisplay implements Lifecycle {
     GlyphLayout glyphLayout = new GlyphLayout();
 
 
-
-
     @Override
     public void init() {
         fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Segoe UI.ttf"));

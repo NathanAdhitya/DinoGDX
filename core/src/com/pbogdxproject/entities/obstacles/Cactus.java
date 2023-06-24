@@ -3,8 +3,9 @@ package com.pbogdxproject.entities.obstacles;
 import com.badlogic.gdx.graphics.Texture;
 import com.pbogdxproject.GameConstants;
 import com.pbogdxproject.MyGdxGame;
-import com.pbogdxproject.entities.Offset2D;
-import com.pbogdxproject.entities.RectangleCollider;
+import com.pbogdxproject.entities.utils.Obstacle;
+import com.pbogdxproject.entities.utils.Offset2D;
+import com.pbogdxproject.entities.utils.RectangleCollider;
 
 public class Cactus extends Obstacle {
 

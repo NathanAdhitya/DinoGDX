@@ -1,4 +1,4 @@
-package com.pbogdxproject.entities;
+package com.pbogdxproject.entities.utils;
 
 public class Offset2D implements Cloneable {
     public float top, bottom, right, left;

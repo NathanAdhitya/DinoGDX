@@ -5,8 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.pbogdxproject.MyGdxGame;
-import com.pbogdxproject.entities.Offset2D;
-import com.pbogdxproject.entities.RectangleCollider;
+import com.pbogdxproject.entities.utils.Obstacle;
+import com.pbogdxproject.entities.utils.Offset2D;
+import com.pbogdxproject.entities.utils.RectangleCollider;
 
 import java.util.Random;
 
@@ -65,7 +66,7 @@ public class Bird extends Obstacle {
     }
 
     @Override
-    void onPlayerCollision() {
+    public void onPlayerCollision() {
 
     }
 }

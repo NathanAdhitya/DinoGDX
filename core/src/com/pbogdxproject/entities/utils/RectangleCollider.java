@@ -1,4 +1,4 @@
-package com.pbogdxproject.entities;
+package com.pbogdxproject.entities.utils;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;

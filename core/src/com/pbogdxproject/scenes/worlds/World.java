@@ -1,6 +1,6 @@
 package com.pbogdxproject.scenes.worlds;
 
-import com.pbogdxproject.entities.obstacles.Obstacle;
+import com.pbogdxproject.entities.utils.Obstacle;
 import com.pbogdxproject.interfaces.Lifecycle;
 
 abstract public class World implements Lifecycle {

@@ -1,9 +1,9 @@
 package com.pbogdxproject.entities.background;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.pbogdxproject.GameConstants;
 import com.pbogdxproject.GameState;
 import com.pbogdxproject.MyGdxGame;
+import com.pbogdxproject.entities.utils.BackgroundEntity;
 
 public class Cloud extends BackgroundEntity {
     @Override

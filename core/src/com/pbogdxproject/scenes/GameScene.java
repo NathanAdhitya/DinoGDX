@@ -1,6 +1,5 @@
 package com.pbogdxproject.scenes;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
@@ -10,11 +9,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pbogdxproject.GameConstants;
 import com.pbogdxproject.GameState;
 import com.pbogdxproject.GameStatus;
-import com.pbogdxproject.entities.Entity;
 import com.pbogdxproject.entities.Player;
-import com.pbogdxproject.entities.background.BackgroundEntity;
 import com.pbogdxproject.entities.background.Cloud;
-import com.pbogdxproject.entities.obstacles.Obstacle;
+import com.pbogdxproject.entities.utils.BackgroundEntity;
+import com.pbogdxproject.entities.utils.Entity;
+import com.pbogdxproject.entities.utils.Obstacle;
 import com.pbogdxproject.interfaces.Lifecycle;
 import com.pbogdxproject.scenes.parts.HighScoreDisplay;
 import com.pbogdxproject.scenes.parts.ScoreDisplay;
@@ -67,13 +66,20 @@ public class GameScene implements Lifecycle {
         // Process GameState based on jump button.
         boolean jumpButtonPressed = Gdx.input.isKeyPressed(Input.Keys.SPACE);
 
-        if(jumpButtonPressed){
-            if(GameState.status == GameStatus.STOPPED){
+        if (jumpButtonPressed) {
+            if (GameState.status == GameStatus.STOPPED) {
                 GameState.status = GameStatus.PLAYING;
                 GameState.scrollSpeed = GameConstants.INITIAL_SCROLL_SPEED;
 
                 scrollingFloor.runInitialAnimation();
-            } else if(GameState.status == GameStatus.DEAD){
+
+                // Delay initial obstacle and cloud spawn by TIME_TO_FULL_GROUND_ANIMATION
+                lastObstacleSpawnTime =
+                    TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
+                lastCloudSpawnAttempt =
+                    TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
+
+            } else if (GameState.status == GameStatus.DEAD) {
                 GameState.status = GameStatus.PLAYING;
                 GameState.scrollSpeed = GameConstants.INITIAL_SCROLL_SPEED;
 
@@ -87,6 +93,12 @@ public class GameScene implements Lifecycle {
                 backgroundEntities.clear();
 
                 scrollingFloor.runInitialAnimation();
+
+                // Delay initial obstacle and cloud spawn by TIME_TO_FULL_GROUND_ANIMATION
+                lastObstacleSpawnTime =
+                    TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
+                lastCloudSpawnAttempt =
+                    TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
             }
         }
 

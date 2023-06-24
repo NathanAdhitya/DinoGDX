@@ -13,6 +13,8 @@ import com.pbogdxproject.GameConstants;
 import com.pbogdxproject.GameState;
 import com.pbogdxproject.GameStatus;
 import com.pbogdxproject.MyGdxGame;
+import com.pbogdxproject.entities.utils.Offset2D;
+import com.pbogdxproject.entities.utils.RectangleCollider;
 import com.pbogdxproject.interfaces.Lifecycle;
 
 public class Player extends Rectangle implements Lifecycle {
@@ -116,7 +118,7 @@ public class Player extends Rectangle implements Lifecycle {
         if (GameState.status == GameStatus.PLAYING)
             stateTime += Gdx.graphics.getDeltaTime();
 
-        if (GameState.status == GameStatus.DEAD){
+        if (GameState.status == GameStatus.DEAD) {
             batch.draw(textures[4], x, y);
             return;
         }

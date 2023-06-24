@@ -18,6 +18,7 @@ public class ScrollingFloor implements Lifecycle {
      * Indicates how many slices does the ground texture have.
      */
     private final static int REGION_SLICES = 16;
+    final private int RENDER_REGION_MULT = 2;
     Viewport viewport;
     private Texture texture;
     private TextureRegion[] slicedRegions;
@@ -27,10 +28,7 @@ public class ScrollingFloor implements Lifecycle {
     private float startY = GameConstants.Y_GROUND;
     private float startX = 0;
     private Random rnd = new Random();
-
     private float initialAnimationStateTime = 0;
-
-    final private int RENDER_REGION_MULT = 2;
     private int renderRegionWidth;
     private int renderRegionHeight;
 
