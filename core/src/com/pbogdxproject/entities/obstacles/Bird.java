@@ -25,7 +25,7 @@ public class Bird extends Obstacle {
     public void init() {
         y = this.BIRD_HEIGHTS[GameState.RANDOM.nextInt(this.BIRD_HEIGHTS.length)] * GameConstants.METERS_TO_PIXELS_MULTIPLIER;
         texture = MyGdxGame.assets.get("textures/bird.png", Texture.class);
-        speed = 250;
+        speed = 210;
 
         Texture runningAnimationSheet = MyGdxGame.assets.get("textures/bird-anim.png", Texture.class);
 

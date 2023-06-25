@@ -10,11 +10,11 @@ public class GameConstants {
 
     // Scene Settings
     final static public float TIME_TO_FULL_GROUND_ANIMATION = 2f;
-    final static public float INITIAL_SCROLL_SPEED = 2f;
+    final static public float INITIAL_SCROLL_SPEED = 2.5f;
 
     // Physics Settings
     final public static float PHYSICS_MULTIPLIER = 250f;
 
     // Debug Settings
-    final static public boolean DEBUG_DRAW_COLLISION_SHAPES = true;
+    final static public boolean DEBUG_DRAW_COLLISION_SHAPES = false;
 }

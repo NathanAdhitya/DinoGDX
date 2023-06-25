@@ -12,16 +12,26 @@ abstract public class Entity implements Lifecycle, Pool.Poolable {
      * Absolute position of entity.
      */
     public float x = 0, y = 0;
+
     protected int width, height;
     protected Texture texture = null;
     protected float speed = 200;
     boolean isAlive = false;
     private float scale = 1;
 
+
     public void init() {
         isAlive = true;
 
         recalculateSize();
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public float getScale() {

@@ -21,6 +21,7 @@ import com.pbogdxproject.entities.utils.BackgroundEntity;
 import com.pbogdxproject.entities.utils.Entity;
 import com.pbogdxproject.entities.utils.Obstacle;
 import com.pbogdxproject.interfaces.Lifecycle;
+import com.pbogdxproject.scenes.parts.GameStateDisplay;
 import com.pbogdxproject.scenes.parts.HighScoreDisplay;
 import com.pbogdxproject.scenes.parts.ScoreDisplay;
 import com.pbogdxproject.scenes.parts.ScrollingFloor;
@@ -43,6 +44,10 @@ public class GameScene implements Lifecycle {
 
     final Class<?>[] SPAWNABLE_OBSTACLES = {
         Bird.class,
+        Cactus.class,
+        Cactus.class,
+        Cactus.class,
+        Cactus.class,
         Cactus.class,
         Cart.class,
         Snake.class
@@ -67,6 +72,8 @@ public class GameScene implements Lifecycle {
 
         scoreDisplay = new ScoreDisplay(viewport);
         lifecycles.add(scoreDisplay);
+
+        lifecycles.add(new GameStateDisplay(viewport));
 
         // Call init on all lifecycles
         lifecycles.forEach(Lifecycle::init);
@@ -94,7 +101,7 @@ public class GameScene implements Lifecycle {
                 lastCloudSpawnAttempt =
                     TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
 
-            } else if (GameState.status == GameStatus.DEAD) {
+            } else if (GameState.status == GameStatus.DEAD && TimeUtils.timeSinceMillis(GameState.lastDeath) > 1000) {
                 GameState.status = GameStatus.PLAYING;
                 GameState.scrollSpeed = GameConstants.INITIAL_SCROLL_SPEED;
 
@@ -102,7 +109,11 @@ public class GameScene implements Lifecycle {
                 GameState.sessionScore = 0;
 
                 // Return player x to initial
-                player.x = 100;
+                player.y = 100;
+
+                // Return obstacleSpawnInterval to initial
+                obstacleSpawnInterval = 2f;
+
 
                 // Dispose all on-screen entities and obstacles
                 obstacles.forEach(Lifecycle::dispose);
@@ -135,24 +146,20 @@ public class GameScene implements Lifecycle {
             // Check whether score passed 100, if yes, then flash score display and play point sound
             if ((int) (GameState.sessionScore / 100) < (int) (GameState.sessionScore + scoreDelta) / 100) {
                 pointSound.play();
+                scoreDisplay.flash();
             }
 
             GameState.sessionScore += scoreDelta;
-
-            // Cek apakah skor mencapai kelipatan 1000
-//            if (GameState.sessionScore > 1000 && Math.floor(GameState.sessionScore) % 1000 == 0) {
-//                pointSound.play();
-//            }
 
             // Increment scroll speed
             if (GameState.sessionScore > 1000) {
                 GameState.scrollSpeed = Math.min(GameState.sessionScore * 0.0015f + 2.5f, 5);
             } else if (GameState.sessionScore > 500) {
-                GameState.scrollSpeed = 3f;
+                GameState.scrollSpeed = 3.25f;
             } else if (GameState.sessionScore > 250) {
-                GameState.scrollSpeed = 2.75f;
+                GameState.scrollSpeed = 3f;
             } else if (GameState.sessionScore > 80) {
-                GameState.scrollSpeed = 2.5f;
+                GameState.scrollSpeed = 2.75f;
             }
 
 
@@ -161,7 +168,7 @@ public class GameScene implements Lifecycle {
                 lastObstacleSpawnTime = TimeUtils.millis();
 
                 // Reduce obstacle spawn time
-                obstacleSpawnInterval = Math.max(obstacleSpawnInterval * 0.95f, 0.8f);
+                obstacleSpawnInterval = Math.max(obstacleSpawnInterval * 0.95f, 0.75f);
 
                 // Randomly decide whether obstacle should be spawned or not
                 if (GameState.RANDOM.nextFloat() > 0.2f) {
@@ -173,13 +180,30 @@ public class GameScene implements Lifecycle {
                         newObstacle.x = viewport.getWorldWidth() + 100;
                         newObstacle.init();
                         newObstacle.tickCollision(player);
+
+                        // If the spawnedObstacle is a cactus, then randomly stack 1-3 cactuses on next to it.
+                        if (newObstacle instanceof Cactus) {
+                            if (GameState.RANDOM.nextFloat() > 0.5f) {
+                                Obstacle newObstacle2 = new Cactus();
+                                obstacles.add(newObstacle2);
+                                newObstacle2.x = newObstacle.x + newObstacle.getWidth();
+                                newObstacle2.init();
+                                newObstacle2.tickCollision(player);
+
+                                if (GameState.RANDOM.nextFloat() > 0.5f) {
+                                    Obstacle newObstacle3 = new Cactus();
+                                    obstacles.add(newObstacle3);
+                                    newObstacle3.x = newObstacle2.x + newObstacle2.getWidth();
+                                    newObstacle3.init();
+                                    newObstacle3.tickCollision(player);
+                                }
+                            }
+                        }
                     } catch (IllegalAccessException | InstantiationException | InvocationTargetException |
                              NoSuchMethodException e) {
                         e.printStackTrace();
                     }
                 }
-
-
             }
 
             // Spawn clouds randomly

@@ -3,6 +3,7 @@ package com.pbogdxproject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.Random;
 
@@ -15,6 +16,8 @@ public class GameState {
     public static float scrollSpeed = 0;
     public static float sessionScore = 0;
     public static float highScore = 100;
+    public static long lastDeath = 0;
+
 
     public static Music deadSound = MyGdxGame.assets.get("sounds/die.wav", Music.class);;
 
@@ -22,6 +25,7 @@ public class GameState {
         scrollSpeed = 0;
         deadSound.play();
         status = GameStatus.DEAD;
+        lastDeath = TimeUtils.millis();
         System.out.println("Player died!");
 
         // Save high score if it's higher than the current score
