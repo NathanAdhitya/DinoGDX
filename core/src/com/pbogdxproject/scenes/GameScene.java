@@ -2,6 +2,7 @@ package com.pbogdxproject.scenes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pbogdxproject.GameConstants;
 import com.pbogdxproject.GameState;
 import com.pbogdxproject.GameStatus;
+import com.pbogdxproject.MyGdxGame;
 import com.pbogdxproject.entities.Player;
 import com.pbogdxproject.entities.background.Cloud;
 import com.pbogdxproject.entities.utils.BackgroundEntity;
@@ -38,6 +40,7 @@ public class GameScene implements Lifecycle {
 
     Camera camera;
     Viewport viewport;
+    Music pointSound;
 
     public GameScene(Camera camera, Viewport viewport) {
         this.camera = camera;
@@ -60,6 +63,8 @@ public class GameScene implements Lifecycle {
 
         // Tick the player once.
         player.tick(0);
+
+        pointSound = MyGdxGame.assets.get("sounds/point.wav", Music.class);
     }
 
     public void tick(float delta) {
@@ -112,7 +117,12 @@ public class GameScene implements Lifecycle {
             backgroundEntities.forEach(v -> v.tick(delta));
 
             // Increment score
-            GameState.sessionScore += delta * 5 * GameState.scrollSpeed;
+            GameState.sessionScore += delta * 100 * GameState.scrollSpeed;
+
+            // Cek apakah skor mencapai kelipatan 1000
+            if (GameState.sessionScore > 1000 && Math.floor(GameState.sessionScore) % 1000 == 0) {
+                pointSound.play();
+            }
 
             // Increment scroll speed
             if (GameState.sessionScore > 1000) {
