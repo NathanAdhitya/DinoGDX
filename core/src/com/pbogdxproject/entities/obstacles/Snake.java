@@ -8,7 +8,8 @@ import com.pbogdxproject.entities.utils.RectangleCollider;
 
 public class Snake extends Obstacle {
    final private static RectangleCollider[] COLLIDERS = {
-           new RectangleCollider(new Offset2D(0, 0, 16, 12)),
+           new RectangleCollider(new Offset2D(0, 5, 18, 10)),
+           new RectangleCollider(new Offset2D(40, 10, 10, 4))
    };
 
    @Override
