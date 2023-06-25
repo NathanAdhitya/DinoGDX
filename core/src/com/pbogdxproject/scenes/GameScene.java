@@ -117,12 +117,13 @@ public class GameScene implements Lifecycle {
             backgroundEntities.forEach(v -> v.tick(delta));
 
             // Increment score
-            GameState.sessionScore += delta * 100 * GameState.scrollSpeed;
+            GameState.sessionScore += delta * 5 * GameState.scrollSpeed;
 
             // Cek apakah skor mencapai kelipatan 1000
-            if (GameState.sessionScore > 1000 && Math.floor(GameState.sessionScore) % 1000 == 0) {
+            if (GameState.sessionScore >= 1000 && Math.floor(GameState.sessionScore) % 1000 == 0) {
                 pointSound.play();
             }
+
 
             // Increment scroll speed
             if (GameState.sessionScore > 1000) {
