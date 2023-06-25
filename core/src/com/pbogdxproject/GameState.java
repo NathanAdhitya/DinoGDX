@@ -2,6 +2,7 @@ package com.pbogdxproject;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 
 import java.util.Random;
 
@@ -15,8 +16,11 @@ public class GameState {
     public static float sessionScore = 0;
     public static float highScore = 100;
 
+    public static Music deadSound = MyGdxGame.assets.get("sounds/die.wav", Music.class);;
+
     public static void onPlayerDeath() {
         scrollSpeed = 0;
+        deadSound.play();
         status = GameStatus.DEAD;
         System.out.println("Player died!");
 

@@ -84,26 +84,26 @@ public class GameScene implements Lifecycle {
                 lastCloudSpawnAttempt =
                     TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
 
-            } else if (GameState.status == GameStatus.DEAD) {
-                GameState.status = GameStatus.PLAYING;
-                GameState.scrollSpeed = GameConstants.INITIAL_SCROLL_SPEED;
-
-                // Reset current score
-                GameState.sessionScore = 0;
-
-                // Dispose all on-screen entities and obstacles
-                obstacles.forEach(Lifecycle::dispose);
-                obstacles.clear();
-                backgroundEntities.forEach(Lifecycle::dispose);
-                backgroundEntities.clear();
-
-                scrollingFloor.runInitialAnimation();
-
-                // Delay initial obstacle and cloud spawn by TIME_TO_FULL_GROUND_ANIMATION
-                lastObstacleSpawnTime =
-                    TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
-                lastCloudSpawnAttempt =
-                    TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
+//            } else if (GameState.status == GameStatus.DEAD) {
+//                GameState.status = GameStatus.PLAYING;
+//                GameState.scrollSpeed = GameConstants.INITIAL_SCROLL_SPEED;
+//
+//                // Reset current score
+//                GameState.sessionScore = 0;
+//
+//                // Dispose all on-screen entities and obstacles
+//                obstacles.forEach(Lifecycle::dispose);
+//                obstacles.clear();
+//                backgroundEntities.forEach(Lifecycle::dispose);
+//                backgroundEntities.clear();
+//
+//                scrollingFloor.runInitialAnimation();
+//
+//                // Delay initial obstacle and cloud spawn by TIME_TO_FULL_GROUND_ANIMATION
+//                lastObstacleSpawnTime =
+//                    TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
+//                lastCloudSpawnAttempt =
+//                    TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
             }
         }
 
