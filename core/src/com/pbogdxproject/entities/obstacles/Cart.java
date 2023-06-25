@@ -8,7 +8,9 @@ import com.pbogdxproject.entities.utils.RectangleCollider;
 
 public class Cart extends Obstacle {
     final private static RectangleCollider[] COLLIDERS = {
-        new RectangleCollider(new Offset2D(14, 0, 10, 14))
+            new RectangleCollider(new Offset2D(17, 15, 10, 50)),
+            new RectangleCollider(new Offset2D(60, 15, 10, 10)),
+            new RectangleCollider(new Offset2D(23, 15, 10, 23))
     };
 
     @Override
