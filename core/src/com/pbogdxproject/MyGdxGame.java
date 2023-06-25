@@ -41,14 +41,13 @@ public class MyGdxGame extends ApplicationAdapter {
 
         // Load all assets in assets/textures
         Arrays.stream(Gdx.files.internal("textures").list()).forEach(file -> {
-            System.out.println("Loading " + file.path());
+            Gdx.app.debug("AssetLoader", "Loading " + file.path());
             assets.load(file.path(), Texture.class);
-            System.out.println(TimeUtils.millis());
         });
 
         // Load all sounds in assets
         Arrays.stream(Gdx.files.internal("sounds").list()).forEach(file -> {
-            System.out.println("Loading " + file.path());
+            Gdx.app.debug("AssetLoader", "Loading " + file.path());
             assets.load(file.path(), Music.class);
         });
 

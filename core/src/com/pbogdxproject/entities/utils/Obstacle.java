@@ -43,7 +43,10 @@ abstract public class Obstacle extends Entity {
     @Override
     public void render(SpriteBatch batch) {
         super.render(batch);
+        renderColliders(batch);
+    }
 
+    protected void renderColliders(SpriteBatch batch) {
         for (RectangleCollider collider : absoluteColliders) {
             collider.render(batch);
         }

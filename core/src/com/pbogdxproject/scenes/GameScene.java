@@ -13,6 +13,10 @@ import com.pbogdxproject.GameStatus;
 import com.pbogdxproject.MyGdxGame;
 import com.pbogdxproject.entities.Player;
 import com.pbogdxproject.entities.background.Cloud;
+import com.pbogdxproject.entities.obstacles.Bird;
+import com.pbogdxproject.entities.obstacles.Cactus;
+import com.pbogdxproject.entities.obstacles.Cart;
+import com.pbogdxproject.entities.obstacles.Snake;
 import com.pbogdxproject.entities.utils.BackgroundEntity;
 import com.pbogdxproject.entities.utils.Entity;
 import com.pbogdxproject.entities.utils.Obstacle;
@@ -20,15 +24,13 @@ import com.pbogdxproject.interfaces.Lifecycle;
 import com.pbogdxproject.scenes.parts.HighScoreDisplay;
 import com.pbogdxproject.scenes.parts.ScoreDisplay;
 import com.pbogdxproject.scenes.parts.ScrollingFloor;
-import com.pbogdxproject.scenes.worlds.World;
-import com.pbogdxproject.scenes.worlds.WorldNormal;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class GameScene implements Lifecycle {
     ArrayList<Lifecycle> lifecycles = new ArrayList<>();
-    World currentWorld = new WorldNormal();
     long lastObstacleSpawnTime = 0;
     long lastCloudSpawnAttempt = 0;
     float obstacleSpawnInterval = 2f;
@@ -37,6 +39,14 @@ public class GameScene implements Lifecycle {
     Player player = new Player();
 
     ScrollingFloor scrollingFloor;
+    ScoreDisplay scoreDisplay;
+
+    final Class<?>[] SPAWNABLE_OBSTACLES = {
+        Bird.class,
+        Cactus.class,
+        Cart.class,
+        Snake.class
+    };
 
     Camera camera;
     Viewport viewport;
@@ -47,16 +57,16 @@ public class GameScene implements Lifecycle {
         this.viewport = viewport;
     }
 
-    @Override
     public void init() {
         // Create Player
-        lifecycles.add(currentWorld);
         scrollingFloor = new ScrollingFloor(viewport);
         lifecycles.add(scrollingFloor);
 
         lifecycles.add(player);
         lifecycles.add(new HighScoreDisplay(viewport));
-        lifecycles.add(new ScoreDisplay(viewport));
+
+        scoreDisplay = new ScoreDisplay(viewport);
+        lifecycles.add(scoreDisplay);
 
         // Call init on all lifecycles
         lifecycles.forEach(Lifecycle::init);
@@ -84,26 +94,29 @@ public class GameScene implements Lifecycle {
                 lastCloudSpawnAttempt =
                     TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
 
-//            } else if (GameState.status == GameStatus.DEAD) {
-//                GameState.status = GameStatus.PLAYING;
-//                GameState.scrollSpeed = GameConstants.INITIAL_SCROLL_SPEED;
-//
-//                // Reset current score
-//                GameState.sessionScore = 0;
-//
-//                // Dispose all on-screen entities and obstacles
-//                obstacles.forEach(Lifecycle::dispose);
-//                obstacles.clear();
-//                backgroundEntities.forEach(Lifecycle::dispose);
-//                backgroundEntities.clear();
-//
-//                scrollingFloor.runInitialAnimation();
-//
-//                // Delay initial obstacle and cloud spawn by TIME_TO_FULL_GROUND_ANIMATION
-//                lastObstacleSpawnTime =
-//                    TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
-//                lastCloudSpawnAttempt =
-//                    TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
+            } else if (GameState.status == GameStatus.DEAD) {
+                GameState.status = GameStatus.PLAYING;
+                GameState.scrollSpeed = GameConstants.INITIAL_SCROLL_SPEED;
+
+                // Reset current score
+                GameState.sessionScore = 0;
+
+                // Return player x to initial
+                player.x = 100;
+
+                // Dispose all on-screen entities and obstacles
+                obstacles.forEach(Lifecycle::dispose);
+                obstacles.clear();
+                backgroundEntities.forEach(Lifecycle::dispose);
+                backgroundEntities.clear();
+
+                scrollingFloor.runInitialAnimation();
+
+                // Delay initial obstacle and cloud spawn by TIME_TO_FULL_GROUND_ANIMATION
+                lastObstacleSpawnTime =
+                    TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
+                lastCloudSpawnAttempt =
+                    TimeUtils.millis() + (long) GameConstants.TIME_TO_FULL_GROUND_ANIMATION * 1000 - (long) obstacleSpawnInterval * 1000;
             }
         }
 
@@ -117,12 +130,19 @@ public class GameScene implements Lifecycle {
             backgroundEntities.forEach(v -> v.tick(delta));
 
             // Increment score
-            GameState.sessionScore += delta * 100 * GameState.scrollSpeed;
+            float scoreDelta = delta * 5 * GameState.scrollSpeed;
 
-            // Cek apakah skor mencapai kelipatan 1000
-            if (GameState.sessionScore > 1000 && Math.floor(GameState.sessionScore) % 1000 == 0) {
+            // Check whether score passed 100, if yes, then flash score display and play point sound
+            if ((int) (GameState.sessionScore / 100) < (int) (GameState.sessionScore + scoreDelta) / 100) {
                 pointSound.play();
             }
+
+            GameState.sessionScore += scoreDelta;
+
+            // Cek apakah skor mencapai kelipatan 1000
+//            if (GameState.sessionScore > 1000 && Math.floor(GameState.sessionScore) % 1000 == 0) {
+//                pointSound.play();
+//            }
 
             // Increment scroll speed
             if (GameState.sessionScore > 1000) {
@@ -140,13 +160,26 @@ public class GameScene implements Lifecycle {
             if (TimeUtils.millis() - lastObstacleSpawnTime > obstacleSpawnInterval * 1000) {
                 lastObstacleSpawnTime = TimeUtils.millis();
 
-                Obstacle newObstacle = currentWorld.spawnObstacle();
-                if (newObstacle != null) {
-                    obstacles.add(newObstacle);
-                    newObstacle.x = viewport.getWorldWidth() + 100;
-                    newObstacle.init();
-                    newObstacle.tickCollision(player);
+                // Reduce obstacle spawn time
+                obstacleSpawnInterval = Math.max(obstacleSpawnInterval * 0.95f, 0.8f);
+
+                // Randomly decide whether obstacle should be spawned or not
+                if (GameState.RANDOM.nextFloat() > 0.2f) {
+                    try {
+                        Obstacle newObstacle =
+                            (Obstacle) SPAWNABLE_OBSTACLES[GameState.RANDOM.nextInt(SPAWNABLE_OBSTACLES.length)].getDeclaredConstructor().newInstance();
+
+                        obstacles.add(newObstacle);
+                        newObstacle.x = viewport.getWorldWidth() + 100;
+                        newObstacle.init();
+                        newObstacle.tickCollision(player);
+                    } catch (IllegalAccessException | InstantiationException | InvocationTargetException |
+                             NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
                 }
+
+
             }
 
             // Spawn clouds randomly

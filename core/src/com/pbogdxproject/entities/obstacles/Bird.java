@@ -1,67 +1,68 @@
 package com.pbogdxproject.entities.obstacles;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.pbogdxproject.GameConstants;
+import com.pbogdxproject.GameState;
+import com.pbogdxproject.GameStatus;
 import com.pbogdxproject.MyGdxGame;
+import com.pbogdxproject.entities.utils.Obstacle;
 import com.pbogdxproject.entities.utils.Offset2D;
 import com.pbogdxproject.entities.utils.RectangleCollider;
-import com.pbogdxproject.entities.utils.Obstacle;
-
-import java.util.Random;
 
 public class Bird extends Obstacle {
     final private static RectangleCollider[] COLLIDERS = {
-        new RectangleCollider(new Offset2D(0, 0, 15, 15)),
-        new RectangleCollider(new Offset2D(20, 30, 0, 0))
+        new RectangleCollider(new Offset2D(10, 12, 10, 12))
     };
-    int[] yValues = {1, 2}; // diisi sama tinggi e burung e mau berapa
+    final float[] BIRD_HEIGHTS = {1.3f, 2f, 2.5f, 2.5f, 2f};
+    private TextureRegion[] animationFrames;
+    private Animation<TextureRegion> animation;
+    private float stateTime = 0;
 
-    public Bird() {
-        Random rndm = new Random();
-        this.y = this.yValues[rndm.nextInt(this.yValues.length)] * GameConstants.METERS_TO_PIXELS_MULTIPLIER;
+    @Override
+    public void init() {
+        y = this.BIRD_HEIGHTS[GameState.RANDOM.nextInt(this.BIRD_HEIGHTS.length)] * GameConstants.METERS_TO_PIXELS_MULTIPLIER;
+        texture = MyGdxGame.assets.get("textures/bird.png", Texture.class);
+        speed = 250;
 
-        Texture runningAnimationSheet = new Texture(Gdx.files.internal("textures/bird-anim.png"));
+        Texture runningAnimationSheet = MyGdxGame.assets.get("textures/bird-anim.png", Texture.class);
 
-        TextureRegion[][] tmp = TextureRegion.split(runningAnimationSheet,
+        TextureRegion[][] tmp = TextureRegion.split(
+            runningAnimationSheet,
             runningAnimationSheet.getWidth() / 2
             , runningAnimationSheet.getHeight()
         );
 
-        TextureRegion[] runningFrames = new TextureRegion[2];
-        for (int i = 1, n = 0; i < tmp[0].length; i++) {
-            runningFrames[n++] = tmp[0][i];
+
+        animationFrames = new TextureRegion[2];
+        for (int i = 0, n = 0; i < tmp[0].length; i++) {
+            animationFrames[n++] = tmp[0][i];
         }
 
-
-    }
-
-    @Override
-    public void init() {
-        texture = MyGdxGame.assets.get("textures/bird.png", Texture.class);
+        animation = new Animation<TextureRegion>(0.15f, animationFrames);
 
         colliders = COLLIDERS;
         super.init();
     }
 
-//    @Override
-//    public void tick(float delta) {
-//
-//    }
+    @Override
+    public void tick(float delta) {
+        stateTime += delta;
+        super.tick(delta);
+    }
 
-////    @Override
-////    public void render(SpriteBatch batch) {
-////
-////    }
-//
-//    @Override
-//    public void dispose() {
-//
-//    }
-//
-//    @Override
-//    public void onPlayerCollision() {
-//
-//    }
+    @Override
+    public void render(SpriteBatch batch) {
+        // Render
+        if (GameState.status == GameStatus.PLAYING) {
+            batch.draw(animation.getKeyFrame(stateTime, true), x, y);
+        } else {
+            batch.draw(animationFrames[0], x, y);
+        }
+
+        renderColliders(batch);
+    }
+
 }
