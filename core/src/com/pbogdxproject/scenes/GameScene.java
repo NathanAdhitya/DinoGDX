@@ -139,8 +139,6 @@ public class GameScene implements Lifecycle {
                 }
             }
 
-
-
             // Spawn clouds randomly
             if (TimeUtils.millis() - lastCloudSpawnAttempt > 400 / GameState.scrollSpeed) {
                 lastCloudSpawnAttempt = TimeUtils.millis();

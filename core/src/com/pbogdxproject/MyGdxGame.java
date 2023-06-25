@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -42,6 +43,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Arrays.stream(Gdx.files.internal("textures").list()).forEach(file -> {
             System.out.println("Loading " + file.path());
             assets.load(file.path(), Texture.class);
+            System.out.println(TimeUtils.millis());
         });
 
         // Load all sounds in assets

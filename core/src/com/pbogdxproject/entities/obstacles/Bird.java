@@ -2,8 +2,8 @@ package com.pbogdxproject.entities.obstacles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.pbogdxproject.GameConstants;
 import com.pbogdxproject.MyGdxGame;
 import com.pbogdxproject.entities.utils.Offset2D;
 import com.pbogdxproject.entities.utils.RectangleCollider;
@@ -16,17 +16,11 @@ public class Bird extends Obstacle {
         new RectangleCollider(new Offset2D(0, 0, 15, 15)),
         new RectangleCollider(new Offset2D(20, 30, 0, 0))
     };
-    int width;
-    int height;
-    int[] yValues = {1, 10}; // diisi sama tinggi e burung e mau berapa
-    int yValue;
+    int[] yValues = {1, 2}; // diisi sama tinggi e burung e mau berapa
 
     public Bird() {
-        width = 60;
-        height = 54;
-
         Random rndm = new Random();
-        this.yValue = this.yValues[rndm.nextInt(this.yValues.length)];
+        this.y = this.yValues[rndm.nextInt(this.yValues.length)] * GameConstants.METERS_TO_PIXELS_MULTIPLIER;
 
         Texture runningAnimationSheet = new Texture(Gdx.files.internal("textures/bird-anim.png"));
 
@@ -39,34 +33,35 @@ public class Bird extends Obstacle {
         for (int i = 1, n = 0; i < tmp[0].length; i++) {
             runningFrames[n++] = tmp[0][i];
         }
+
+
     }
 
     @Override
     public void init() {
         texture = MyGdxGame.assets.get("textures/bird.png", Texture.class);
-        y = 100;
 
         colliders = COLLIDERS;
         super.init();
     }
 
-    @Override
-    public void tick(float delta) {
+//    @Override
+//    public void tick(float delta) {
+//
+//    }
 
-    }
-
-    @Override
-    public void render(SpriteBatch batch) {
-
-    }
-
-    @Override
-    public void dispose() {
-
-    }
-
-    @Override
-    public void onPlayerCollision() {
-
-    }
+////    @Override
+////    public void render(SpriteBatch batch) {
+////
+////    }
+//
+//    @Override
+//    public void dispose() {
+//
+//    }
+//
+//    @Override
+//    public void onPlayerCollision() {
+//
+//    }
 }

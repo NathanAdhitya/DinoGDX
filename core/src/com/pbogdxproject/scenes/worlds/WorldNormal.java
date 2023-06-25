@@ -1,6 +1,7 @@
 package com.pbogdxproject.scenes.worlds;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.pbogdxproject.entities.obstacles.Bird;
 import com.pbogdxproject.entities.obstacles.Cactus;
 import com.pbogdxproject.entities.utils.Obstacle;
 
@@ -29,6 +30,6 @@ public class WorldNormal extends World {
 
     @Override
     public Obstacle spawnObstacle() {
-        return new Cactus();
+        return new Bird();
     }
 }
