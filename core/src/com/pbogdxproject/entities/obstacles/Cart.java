@@ -15,7 +15,7 @@ public class Cart extends Obstacle {
     @Override
     public void init() {
         texture = MyGdxGame.assets.get("textures/cart.png", Texture.class);
-        y = 100;
+        y = 95;
 
         colliders = COLLIDERS;
         super.init();
